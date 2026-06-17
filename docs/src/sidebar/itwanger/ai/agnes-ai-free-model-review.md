@@ -26,11 +26,19 @@ date: 2026-06-16
 
 尤其是处在项目密集开发期的时候，token的消耗非常大，所以我对免费的 token 是非常渴望的。
 
-这不，必须得告诉大家一个好消息。Agnes AI 宣布无限期免费开放全模态模型 API。文本、图片、视频，三条线全免费，不限量哦。
+这不，必须得告诉大家一个好消息。
+
+Agnes AI 宣布无限期免费开放全模态模型 API。文本、图片、视频，三条线全免费，不限量哦。
 
 ![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260616164239.png)
 
-我也是第一时间就把 Agnes 的这三个模型接到了 PaiAgent，从文本对话到图片生成到视频输出，一条龙跑完。
+我拿到的一个数据样本是这样的。全模态总Token调用量达到3.12T，其中文本模型 Agnes-2.0-Flash 贡献了约1.9T；视觉模型Agnes-Image-2.1-Flash + Agnes-Video-2.0 合计贡献了约1.2T。
+
+非常恐怖的一个数据啊！
+
+说明大家对免费token的需求真的非常大。
+
+我也是第一时间就把 Agnes 的这三个模型接到了 PaiAgent（我的一个开源项目），从文本对话到图片生成到视频输出，一条龙跑完。
 
 ![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260616164341.png)
 
@@ -38,43 +46,61 @@ date: 2026-06-16
 
 ## 01、先把 API Key 搞到手
 
-Agnes 的注册流程很快。访问 https://platform.agnes-ai.com ，注册登录，在控制台创建 API Key，复制下来就行。
+Agnes 的注册流程很快，访问：
 
-【此处插入控制台创建 API Key 截图：截图目标：证明注册流程简单，展示控制台界面；关键词：API Key、控制台、创建；建议位置：网页】
+>https://platform.agnes-ai.com
 
-Agnes 的 API 兼容 OpenAI 格式，Base URL 是 `https://api.agnes-ai.com/v1`，认证方式和 OpenAI 一样，在 Header 里传 `Authorization: Bearer <API_KEY>`。
+登录后在控制台创建 API Key。
 
-这意味着市面上所有支持 OpenAI 接口的工具、框架和平台，改一下 Base URL 和 API Key 就能直接用 Agnes 的模型。PaiAgent 基于 Spring AI 构建，接入成本几乎为零。
+![](https://cdn.paicoding.com/stutymore/sucai-20260613095009.png)
 
-在 PaiAgent 的全局模型配置里，新建一个配置，Provider 选 OpenAI 兼容，API 地址填 Agnes 的 Base URL，粘贴 API Key，模型名填 `agnes-2.0-flash`，图片模型填 `agnes-image-2.1-flash`，视频模型填 `agnes-video-2.0`，保存即可。
+Agnes 的 API 是兼容 OpenAI 格式的，Base URL 是 `https://api.agnes-ai.com/v1`，认证方式和 OpenAI 一样，在 Header 里传 `Authorization: Bearer <API_KEY>`。
 
-【此处插入PaiAgent 全局模型配置截图：截图目标：证明 PaiAgent 可以直接接入 Agnes 模型；关键词：模型配置、Provider、API Key；建议位置：网页】
+这意味着市面上所有支持 OpenAI 接口的工具、框架和平台，改一下 Base URL 和 API Key 就能直接用 Agnes 的模型。
 
-整个过程不到 5 分钟。改完之后 PaiAgent 工作流里的 LLM 节点、图片生成节点、视频生成节点全部自动切换到 Agnes 模型，之前写的工作流不需要做任何修改。
+简单给大家介绍下，PaiAgent是一个类似dify的企业级工作流编排平台，用到了LangGraph4J、SpringAI、MCP、Skill、React等一系列 AI Agent 相关的技术栈，在GitHub上也有快 500 star了。
 
-## 02、文本模型 Agnes-2.0-Flash
+>https://github.com/itwanger/PaiAgent
 
-Agnes-2.0-Flash 是一个通用文本模型，覆盖对话、代码生成、知识问答、任务规划和工具调用。在 Claw-Eval 评测中，它的 Safety 得分达到 97.2、Robustness 得分 95.4，这两个维度衡量的是模型在对抗性输入下的稳定性和安全性，属于 Agent 场景下的硬指标。
+![PaiAgent工作流绘制](https://cdn.paicoding.com/stutymore/agent-plan-paiagent-20260516222134.png)
 
-Claw-Eval 和传统 Benchmark 不同，评测的不是数学题和选择题，而是模型在真实 Agent 场景下的综合执行能力，包括工具调用准确性、多步骤规划和复杂上下文保持。开发者社区把它称为"最接近 AI Agent 实战能力"的评测。Agnes-2.0-Flash 的 PASS^3 得分为 60.9%，这个指标反映的是模型连续三次通过同一任务的一致性，越高说明模型越不"抽风"。
+好，我们继续上实战。
 
-【此处插入Claw-Eval 榜单截图：截图目标：证明 Agnes-2.0-Flash 在 Agent 评测中的排名；关键词：Claw-Eval、排名、Agent；建议位置：网页】
+在 PaiAgent 的全局模型配置里，新建一个配置，供应商选 Agnes，API 地址填 `https://api.agnes-ai.com/v1`，模型名填 `agnes-2.0-flash`，API Key 填之前复制的那个。
 
-我在 PaiAgent 里跑了几个实际场景。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617072353.png)
 
-第一个是多轮对话。让 Agnes-2.0-Flash 扮演一个技术面试官，围绕 Spring AI 和 Agent 架构连续追问了 8 轮。模型的上下文保持能力不错，第 8 轮回答还能准确引用第 2 轮的技术细节，没有出现"忘了前面说过什么"的情况。
+为了支持图片和视频生成，图片模型填 `agnes-image-2.1-flash`，视频模型填 `agnes-video-2.0`，保存即可。
 
-第二个是代码生成。让它写一个 Spring Boot 的 MCP Server，实现天气查询和新闻搜索两个工具。生成的代码结构清晰，Tool 注解、JSON Schema 定义、SSE 传输层都写对了，拿过来微调一下就能跑。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617073738.png)
 
-第三个是工具调用（Function Calling）。这也是 Claw-Eval 重点考察的能力。我给 Agnes-2.0-Flash 注册了三个工具，让它根据用户提问自主判断调用哪个，返回的 JSON 参数格式全部正确，没有出现幻觉式的工具名或凭空捏造参数的情况。对于 PaiAgent 这种依赖 Agent 自主决策的平台，工具调用的准确性比对话质量更重要。
+TTS 预计本周五灰度，到时候我也会第一时间接入。
 
-【此处插入PaiAgent 对话节点运行截图：截图目标：展示 Agnes-2.0-Flash 在 PaiAgent 中的实际对话效果；关键词：对话、Agent、工作流；建议位置：网页】
+有了语音能力，Agnes 就真正实现了全模态覆盖，文本、图片、视频、语音四条线齐活。
 
-【此处插入工具调用测试截图：截图目标：展示 Function Calling 的准确性；关键词：工具调用、JSON、Function Calling；建议位置：网页】
+## 02、文本模型Agnes-2.0-Flash
 
-更值得关注的是即将上线的 1M 上下文窗口。Agnes-2.0-Flash 本周会升级到原生支持 1M Token 的超长上下文，使用方式不变，不需要改代码，只要请求中 messages 数组的总内容量在 1M Token 范围内就能正常使用。
+Agnes-2.0-Flash 是一个通用文本模型，覆盖对话、代码生成、知识问答、任务规划和工具调用。
 
-1M Token 能装多少东西？大约相当于一整本技术手册，或者一个中型项目的全部源码。对 Agent 场景来说，最直接的好处是减少了长内容反复切片、分段传递带来的信息损失。之前跑一个长文档问答，需要先 RAG 检索再拼接上下文，现在可以把整份文档一次性塞进去让模型直接处理。
+在 Claw-Eval 评测中，它的 Safety 得分达到 97.2、Robustness 得分 95.4，这两个维度衡量的是模型在对抗性输入下的稳定性和安全性，属于 Agent 场景下的硬指标。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617074428.png)
+
+Claw-Eval 和传统 Benchmark 不同，评测的不是数学题和选择题，而是模型在真实 Agent 场景下的综合执行能力，包括工具调用准确性、多步骤规划和复杂上下文保持。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617074458.png)
+
+是最接近 AI Agent 实战能力的评测。
+
+Agnes-2.0-Flash 已支持 1M 上下文，我在 PaiCLI 里设计了三个测试用例，分别验证长文档理解、代码生成和工具调用能力。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617075413.png)
+
+第一个测 1M 上下文。我把 Spring AI 的官方文档（大约 15 万字）整份喂给 Agnes-2.0-Flash，然后问它"Spring AI 的 Tool Calling 和 MCP 的 Function Calling 在实现机制上有什么区别"。这个问题的答案散落在文档的不同章节里，需要模型把前面关于 Tool 注解的描述和后面关于 MCP 协议的细节关联起来才能回答准确。Agnes 给出的答案准确抓住了两者在设计层面的核心差异，引用的内容也能在原文档中对应上。换成 128K 上下文的模型，这份文档塞不进去，只能先做 RAG 检索再拼接，中间的信息损失不可避免。
+
+第二个测代码生成。我让它从零写一个完整的 Spring Boot REST API demo，要求包含用户 CRUD、JWT 认证和 Swagger 文档配置。生成的代码结构清晰，Controller、Service、Repository 分层合理，JWT 过滤器的实现也没有明显的安全漏洞。拿过来跑 `mvn spring-boot:run`，改一下数据库连接就能启动。我还追加让它加上参数校验和全局异常处理，补充的代码和前面生成的风格保持一致，没有出现前后矛盾的情况。对于一个免费模型，这个代码生成质量够用了。
+
+第三个测工具调用（Function Calling），这也是 Claw-Eval 重点考察的能力。PaiCLI 内置了 `read_file`、`write_file`、`execute_command`、`grep_code`、`web_search` 等工具，模型需要根据用户意图自主判断调用哪个。我测了一个复合场景，让它"查一下 PaiCLI 项目里有没有硬编码的 API Key，找到的话帮我改成从环境变量读取"。Agnes-2.0-Flash 先调 `grep_code` 搜关键词，再调 `read_file` 确认上下文，最后调 `write_file` 完成修改，整条工具调用链的参数格式全部正确，也没有凭空捏造工具名。对于编码助手来说，工具调用的准确性比对话质量更重要。
 
 这个模型免费前的价格是输入 $0.03/1M tokens、输出 $0.15/1M tokens，大概是同类模型价格的一半。现在直接免费了。
 
