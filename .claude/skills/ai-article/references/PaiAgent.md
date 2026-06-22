@@ -6,7 +6,7 @@
 
 “我看你简历上连个Agent项目都没有，你难道不知道现在是AI时代吗？”老王第一次张嘴就开始给压力。
 
-![架构图](https://cdn.paicoding.com/paicoding/b27902cb1bd58ef41f613a54f189ef6e.png)
+【截图】
 
 我倒是一点都没怂：“LangGraph4J+SpringAI做的这个工作流编排就是啊，王哥，你仔细看。”
 
@@ -16,7 +16,7 @@
 
 >https://github.com/itwanger/PaiAgent
 
-![](https://cdn.paicoding.com/paicoding/55b87846211bc4fc8b9dae38eec8dc2c.jpg)
+【截图】
 
 
 ## content
@@ -69,7 +69,7 @@ public Map<String, Object> initializeState(String inputData) {
 我说：“WorkflowState 是我们自己定义的业务模型，方便序列化和持久化。AgentState 是 LangGraph4j 框架的状态模型。StateManager 负责两者之间的转换，初始化时 WorkflowState 转 Map 给 LangGraph4j，执行完再从 Map 提取回 WorkflowState 用来保存执行记录。”
 
 
-![](https://cdn.paicoding.com/paicoding/739f294e998611b6654cf58a67badd83.png)
+【截图】
 
 
 老王又追了一句：“那节点执行失败了，State 里怎么处理？”
@@ -113,7 +113,7 @@ private WorkflowNode findEntryNode(List<WorkflowNode> nodes, List<WorkflowEdge> 
 找到入口后，加一条 `StateGraph.START -> entryNode` 的边；找到出口后，加一条 `exitNode -> StateGraph.END` 的边。
 
 
-![](https://cdn.paicoding.com/paicoding/f8d998efd64860c6e52ade2e361f7935.png)
+【截图】
 
 
 老王问：“那参数传递呢？A 节点输出的数据，B 节点怎么拿到？”
@@ -129,7 +129,7 @@ newStateData.put("currentNodeId", node.getId());
 下一个节点拿到的 `currentInput`，就是上一个节点的输出。如果某个节点需要跨过中间节点去引用更上游的数据，就从 `nodeOutputs` 里按节点 ID 查。”
 
 
-![](https://cdn.paicoding.com/paicoding/a03cddfc5e6fab656658a54c724eaef2.png)
+【截图】
 
 
 老王又问：“如果是第一个节点呢？没有上游节点怎么办？”
@@ -137,14 +137,14 @@ newStateData.put("currentNodeId", node.getId());
 我说：“第一个节点的 `currentInput` 在 StateManager 初始化时就设好了，`{"input": "用户原始输入"}`。所以第一个节点拿到的就是用户输入。”
 
 
-![](https://cdn.paicoding.com/paicoding/8071c8c62aa885e1c4d32139f5b8d327.png)
+【截图】
 
 
 除了这种链式传递，我们的 Prompt 模板还支持 `{{variable}}` 语法做变量替换。
 
 `PromptTemplateService` 会根据 `inputParams` 配置，区分 `input`（静态值）和 `reference`（引用上游节点输出）两种类型来填充变量。
 
-![](https://cdn.paicoding.com/paicoding/c96868fb55576f04c48a05f1145feeb3.png)
+【截图】
 
 比如配置了 `referenceNode: "node_llm1.analysis"`，就会去 `currentInput` 里找 `analysis` 字段的值填进模板。
 
@@ -158,7 +158,7 @@ newStateData.put("currentNodeId", node.getId());
 input 和 output 是两个基础节点，负责数据的入口和出口。中间的处理节点有 5 种 LLM 节点——openai、deepseek、qwen、zhipu、aiping，都继承自同一个 `AbstractLLMNodeExecutor` 基类。还有一个 TTS 语音合成节点。
 
 
-![](https://cdn.paicoding.com/paicoding/44b12fe21eee2966dda268fc66cb8670.png)
+【截图】
 
 
 这里有个设计亮点——LLM 节点的模板方法模式。我们把配置提取、模板替换、API 调用、输出构建这些通用流程全部封装在 `AbstractLLMNodeExecutor` 里，5 个 LLM 子类只需要实现一个 `getNodeType()` 方法：
@@ -191,7 +191,7 @@ public class NodeExecutorFactory {
 GraphBuilder 在设置入口时加 `StateGraph.START -> entryNode` 的边，设置出口时加 `exitNode -> StateGraph.END` 的边，框架就知道从哪开始执行、到哪结束。
 
 
-![](https://cdn.paicoding.com/paicoding/be2e1cd08dfd8c1edfde78839645ea14.png)
+【截图】
 
 
 这里还有一个设计细节——NodeAdapter 适配器模式。LangGraph4j 要求每个节点是一个 `AsyncNodeAction<AgentState>`，但我们已有的节点执行器是 `NodeExecutor` 接口。
@@ -201,7 +201,7 @@ NodeAdapter 的作用就是做桥接，把 `NodeExecutor.execute(node, input, ca
 这样原有的 NodeExecutor 代码一行不改，就能接入 LangGraph4j 框架。老引擎用 DAG 拓扑排序直接调 NodeExecutor，新引擎通过 NodeAdapter 间接调，两条路复用同一套执行器。
 
 
-![](https://cdn.paicoding.com/paicoding/7d251714a66e78c57c78ba779c820dbd.png)
+【截图】
 
 
 老王点头：“那如果我要新增一种节点类型，比如搜索节点，改动量大吗？”
@@ -250,7 +250,7 @@ public class LoadSkillReferenceFunction implements FunctionCallback {
 
 `getName()` 对应 Function Calling 的 `name` 字段，`getDescription()` 对应 `description`，`getInputTypeSchema()` 返回的就是标准的 JSON Schema，和 OpenAI 的 `parameters` 定义完全一致。
 
-![](https://cdn.paicoding.com/paicoding/c1d5bfc21e17c006e43d9fd2394b38bd.png)
+【截图】
 
 注册到 ChatClient 也很直接。`ChatClientFactory` 创建 ChatClient 时，把 FunctionCallback 列表传进去：
 
@@ -273,7 +273,7 @@ private static final int MAX_FUNCTION_ITERATIONS = 5;
 我说：“靠 OpenAI 兼容协议。”
 
 
-![](https://cdn.paicoding.com/paicoding/e05dadcdf916fd9fa68c8567739df9b6.png)
+【截图】
 
 
 现在主流的国产模型厂商——DeepSeek、通义千问、智谱——基本都提供了 OpenAI 兼容的 API 接口。也就是说请求格式都是 `/v1/chat/completions`，请求体的 `messages`、`model`、`temperature` 这些字段结构一样。差异主要在 `base_url` 和 `api_key`。
@@ -303,7 +303,7 @@ private ChatModel createOpenAICompatibleModel(String apiUrl, String apiKey,
 但有些细节会有差异，比如 token 统计字段，有的叫 `usage.prompt_tokens`，有的叫 `usage.input_tokens`。还有流式返回的 SSE 格式，个别厂商在 `finish_reason` 的枚举值上会有差异。”
 
 
-![](https://cdn.paicoding.com/paicoding/25622fa9c3906715c42fa07c9b66c360.png)
+【截图】
 
 
 “Spring AI 帮我们屏蔽了这些差异，它在 `OpenAiChatModel` 里做了标准化处理。我们从 `ChatResponse` 里拿到的 `metadata.getUsage()` 已经是统一格式了，不需要自己处理不同厂商的差异。”
@@ -334,7 +334,7 @@ private void validateResolvedConfig(LLMNodeConfig config) {
 第二道是全局配置优先机制。节点配置里有一个 `configId` 字段，如果填了，就从数据库读取 `LLMGlobalConfig`，用经过验证的全局配置覆盖节点级配置。这避免了每个节点都手动填 apiUrl 和 apiKey 带来的出错风险。只有全局配置不存在时，才回退到节点自身的配置。
 
 
-![](https://cdn.paicoding.com/paicoding/8ab6010feb099bd40e738323ddc78b91.png)
+【截图】
 
 
 第三道是 `PromptTemplateService` 的模板变量兜底。如果模板里有 `{{variable}}` 但对应的参数找不到值，不会报错，而是替换成空字符串。
@@ -342,7 +342,7 @@ private void validateResolvedConfig(LLMNodeConfig config) {
 这样即使上游节点没有输出预期的字段，Prompt 也不会包含未解析的 `{{}}` 标记——虽然结果可能不太理想，但至少不会让大模型 API 报 400。
 
 
-![](https://cdn.paicoding.com/paicoding/20d1ff5411c9ceaedfb8fec9bb1a81df.png)
+【截图】
 
 
 另外，`temperature` 字段我们默认设了 0.7，`trimString` 方法会对所有字符串参数做 trim 处理，去掉前后空格，防止配置界面拷贝粘贴时带进来的空白字符。
@@ -360,7 +360,7 @@ private void validateResolvedConfig(LLMNodeConfig config) {
 先说音色。我们用的是阿里百炼的 qwen3-tts-flash 模型，它支持的音色是一个枚举列表——Cherry、Ethan、Serena 这些。
 
 
-![](https://cdn.paicoding.com/paicoding/0100b8ccef02cce35eb5623be7c02e9b.png)
+【截图】
 
 
 用户在前端选的是中文名或英文名字符串，到后端需要转成 SDK 的枚举类型。我们写了一个 `convertVoice` 方法做转换，如果传了一个不存在的音色名，不会直接报错，而是降级到默认的 CHERRY：
@@ -423,7 +423,7 @@ MultiModalConversationParam param = MultiModalConversationParam.builder()
 变的只有 `text` 字段，voice 和 model 是固定的。
 
 
-![](https://cdn.paicoding.com/paicoding/c0b579e09c215a5c09a8d2889fbd72ae.png)
+【截图】
 
 
 第二个是并行处理 + 有序合并。我们用 `CompletableFuture.supplyAsync` 并行调用多个 TTS 请求，但最后合并音频的时候是按原始顺序拼接的：
@@ -458,7 +458,7 @@ for (byte[] chunk : audioChunks) {
 这样保证了合并后的音频文件格式正确，音色一致。最终文件上传到 MinIO，返回一个可访问的 URL。
 
 
-![](https://cdn.paicoding.com/paicoding/be3b491597ee55a8f7fe80d22a54076e.jpg)
+【截图】
 
 
 老王追问：“如果某个片段 TTS 调用失败了呢？”
@@ -474,7 +474,7 @@ for (byte[] chunk : audioChunks) {
 你可以理解为，每个 Skill 就是一个专业领域的知识包——比如'短视频脚本生成'、'技术文章写作'、'客服话术'。它不是代码逻辑，而是一个结构化的 Markdown 文件，告诉大模型在这个场景下应该怎么做、用什么模板、参考什么样例。
 
 
-![](https://cdn.paicoding.com/paicoding/dc5b99c70421baa4b42824b1d8fea1b0.png)
+【截图】
 
 
 技术实现上，`SkillRegistry` 在应用启动时自动加载所有 Skill：
@@ -512,7 +512,7 @@ String systemPrompt = buildSystemPrompt(skill, skillReferences);
 我说：“不用。SkillRegistry 在应用启动时一次性加载所有 Skill 到内存，存在 ConcurrentHashMap 里。reference 文件第一次读取后也会缓存。后续请求直接从内存取，不走文件 I/O。ConcurrentHashMap 保证了多线程安全，多个工作流并行执行时不会有并发问题。”
 
 
-![](https://cdn.paicoding.com/paicoding/b437fab2f1263c44227bfac8d644a4cc.jpg)
+【截图】
 
 
 ### 10、Skill 的渐进式引用是什么机制？
@@ -529,7 +529,7 @@ String systemPrompt = buildSystemPrompt(skill, skillReferences);
 
 第三阶段，大模型根据指南中提到的参考文档列表，再调用 `load_skill_reference` 函数，按需加载具体的模板和样例。
 
-![](https://cdn.paicoding.com/paicoding/3da7990f61ca7d2d960804bbbed7eaec.png)
+【截图】
 
 这两个函数我们都实现了——`LoadSkillDetailFunction` 和 `LoadSkillReferenceFunction`，都是标准的 `FunctionCallback`。大模型通过 Function Calling 自主决定什么时候加载、加载哪个文档。
 
@@ -560,7 +560,7 @@ skillReferences = skillRegistry.loadAllReferences(config.getSkillName());
 但如果场景变复杂——比如一个节点配了 Skill，用户输入又特别长（比如一篇万字文章要翻译），或者工作流链条很长、每个节点都往 State 里塞大量数据——上下文就可能吃紧。
 
 
-![](https://cdn.paicoding.com/paicoding/3c9772e0eb0ea1874ad52b75c22290b1.jpg)
+【截图】
 
 
 我们目前的应对策略有几个：

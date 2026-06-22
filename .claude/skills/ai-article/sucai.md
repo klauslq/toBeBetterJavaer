@@ -1,31 +1,17 @@
-标题：无限期免费，Token 随便用，舒服啊！
+标题：技术Leader惊了：“你AI Coding一年了，还想转AI应用开发，Claude Code 用得6吗？”我：“小意思！”
 
-甲方要求：https://my.feishu.cn/docx/LvAdd17ozo3Jw8xdlDacaviwnuf
+这期我们主要来写Claude Code的使用技巧。
 
-6 月 1 日，Agnes AI 宣布无限期免费开放旗下核心全模态模型 API。
+![](https://cdn.paicoding.com/stutymore/sucai-20260622103811.png)
 
-访问https://platform.agnes-ai.com，注册登录后，在控制台里就创建并复制好 API Key：
+先推荐一个命令 /powerup
 
-![](https://cdn.paicoding.com/stutymore/sucai-20260613095009.png)
+再推荐一个在线网站：https://learn.shareai.run/zh/
 
-我想使用 Agnes Image 2.1 Flash 模型生图，访问它的 API 文档 https://agnes-ai.com/doc/agnes-image-21-flash，并将它打包成一份 Skill，命名为 agnes-image-gen。
+![](https://cdn.paicoding.com/stutymore/sucai-20260622104002.png)
 
-提示词：一座城市夜景，高楼林立，霓虹闪烁，雨水反射着光影，赛博朋克风格，整体很有电影感。
+哦，再推荐一个：https://claude.nagdy.me/learn/slash-commands/
 
-提示词：一位面目沧桑的老人，高品质，照片级真实感，王家卫电影风格，使用柯达 Portra 800 胶卷拍摄，高对比度
+![](https://cdn.paicoding.com/stutymore/sucai-20260622104336.png)
 
-先准备一张原图，然后把人物表情改成自然的微微一笑。
-
-将图像生成一张蓝底证件照，
-
-总的来说，Agnes-Image-2.1-Flash 图片模型有点东西的，并不是说免费模型就被阉割。
-
-Agnes 生成的视频是原生支持音画同出
-
-一场 GT3 赛车比赛，晴天日间，一辆 88 号红色法拉利领跑，远景、中景、特写来回切，要电影质感。
-
-一支摇滚乐队在演出，主唱挥手带动观众，背景射灯从暖黄逐渐过渡到冷蓝。
-
-找来了一张图片，让模型基于这张图片生成一段在高速路上演追逐大片，这次提示词挺长，可以看下图。
-
-文档地址：https://agnes-ai.com/doc
+目标把Claude Code的所有关键命令实操过一遍。

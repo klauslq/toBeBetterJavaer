@@ -1,11 +1,11 @@
 ---
-title: 无限期免费，Token 随便用，舒服啊！
-shortTitle: Agnes AI全模态模型实测
-description: 实测 Agnes AI 三款免费全模态模型，Agnes-2.0-Flash 文本、Agnes-Image-2.1-Flash 图片、Agnes-Video-2.0 视频，结合 PaiAgent 工作流平台接入，附 API 调用教程和效果展示。
+title: 无限期免费，Token 随便用，舒服啊。
+shortTitle: Agnes AI免费全模态模型体验
+description: Agnes AI 无限期免费开放全模态 API，实测 Agnes-2.0-Flash 文本模型、Agnes-Image-2.1-Flash 图片模型和 Agnes-Video-V2.0 视频模型的接入流程与生成效果。
 keywords:
   - Agnes AI
-  - Agnes-2.0-Flash
   - 免费AI模型
+  - Agnes-2.0-Flash
   - AI图片生成
   - PaiAgent
 tag:
@@ -13,106 +13,138 @@ tag:
 category:
   - AI
 author: 沉默王二
-date: 2026-06-16
+date: 2026-06-21
 ---
 
 大家好，我是二哥呀。
 
-粗略算一下，我每个月的token账单在 4000 多，其中 Claude 和 Codex 占大头。
-
-说不心疼是假的，但这些钱在AI时代又必须得花，因为几乎每天都在高强度使用。
-
-![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260616163657.png)
-
-尤其是处在项目密集开发期的时候，token的消耗非常大，所以我对免费的 token 是非常渴望的。
-
-这不，必须得告诉大家一个好消息。
-
-Agnes AI 宣布无限期免费开放全模态模型 API。文本、图片、视频，三条线全免费，不限量哦。
+Agnes AI 把全模态 API 免费开放了，文本、图片、视频三条线，不限调用量，无限期。
 
 ![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260616164239.png)
 
-我拿到的一个数据样本是这样的。全模态总Token调用量达到3.12T，其中文本模型 Agnes-2.0-Flash 贡献了约1.9T；视觉模型Agnes-Image-2.1-Flash + Agnes-Video-2.0 合计贡献了约1.2T。
+上线两周，Token 调用总量 3.12T，文本请求破万亿，图片生成超 200 万张，视频生成超 200 万秒。
 
-非常恐怖的一个数据啊！
+我第一时间把三个模型接进了 PaiAgent 的工作流里，接下来，分享一下我的使用心得。
 
-说明大家对免费token的需求真的非常大。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617113555.png)
 
-我也是第一时间就把 Agnes 的这三个模型接到了 PaiAgent（我的一个开源项目），从文本对话到图片生成到视频输出，一条龙跑完。
+>系好安全带，发车了。
 
-![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260616164341.png)
+## 01、Agnes 是什么？
 
->系好安全带，我们粗粗粗发～
+Agnes 目前免费开放的三个模型分别是。
 
-## 01、先把 API Key 搞到手
+- Agnes-2.0-Flash，通用文本模型，覆盖对话、代码生成、知识问答和工具调用，上下文窗口 1M
+- Agnes-Image-2.1-Flash，图片生成模型，支持文生图和图生图，正在灰度 4K 输出，最高 4096×4096
+- Agnes-Video-V2.0，视频生成模型，720P/1080P 可选，原生音画同步生成
 
-Agnes 的注册流程很快，访问：
+TTS 语音合成也在灰度上线中。等语音模型就位，文本、图片、视频、语音四种能力一套 API Key 全覆盖。
 
->https://platform.agnes-ai.com
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617110246.png)
 
-登录后在控制台创建 API Key。
+对我个人来说，免费的文本模型最大的价值在于 Agent 工作流的调试成本降为零。
+
+以前在 PaiAgent 里调工作流，一个节点可能要反复跑几十次才能把提示词调到满意，每次都在烧 token。现在用 Agnes 跑调试，调好了再切回付费模型跑正式任务。
+
+## 02、5 分钟接入Agnes
+
+Agnes 的 API 兼容 OpenAI 格式。
+
+Base URL 是 `https://api.agnes-ai.com/v1`，认证方式和 OpenAI 一致，Header 传 `Authorization: Bearer <API_KEY>`。
+
+### 获取 API Key
+
+访问 Agnes AI 控制台，注册登录，创建 API Key。
 
 ![](https://cdn.paicoding.com/stutymore/sucai-20260613095009.png)
 
-Agnes 的 API 是兼容 OpenAI 格式的，Base URL 是 `https://api.agnes-ai.com/v1`，认证方式和 OpenAI 一样，在 Header 里传 `Authorization: Bearer <API_KEY>`。
+### 接入 PaiAgent
 
-这意味着市面上所有支持 OpenAI 接口的工具、框架和平台，改一下 Base URL 和 API Key 就能直接用 Agnes 的模型。
+我这边是直接接进了 PaiAgent。
 
-简单给大家介绍下，PaiAgent是一个类似dify的企业级工作流编排平台，用到了LangGraph4J、SpringAI、MCP、Skill、React等一系列 AI Agent 相关的技术栈，在GitHub上也有快 500 star了。
+简单交代一下背景，PaiAgent 是一个开源的企业级 AI 工作流编排平台，技术栈是 Java 21 + Spring AI + LangGraph4j，支持拖拽式构建 AI 工作流，GitHub 上快 500 star 了。
 
 >https://github.com/itwanger/PaiAgent
 
 ![PaiAgent工作流绘制](https://cdn.paicoding.com/stutymore/agent-plan-paiagent-20260516222134.png)
 
-好，我们继续上实战。
-
-在 PaiAgent 的全局模型配置里，新建一个配置，供应商选 Agnes，API 地址填 `https://api.agnes-ai.com/v1`，模型名填 `agnes-2.0-flash`，API Key 填之前复制的那个。
+在全局模型配置里新建一条记录。供应商选 Agnes，API 地址填 `https://api.agnes-ai.com/v1`，模型名填 `agnes-2.0-flash`，API Key 粘贴进去。
 
 ![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617072353.png)
 
-为了支持图片和视频生成，图片模型填 `agnes-image-2.1-flash`，视频模型填 `agnes-video-2.0`，保存即可。
+图片模型名填 `agnes-image-2.1-flash`，视频模型名填 `agnes-video-v2.0`，保存。三种生成能力一次配齐。
 
-![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617073738.png)
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617095739.png)
 
-TTS 预计本周五灰度，到时候我也会第一时间接入。
+### 接入 PaiCLI
 
-有了语音能力，Agnes 就真正实现了全模态覆盖，文本、图片、视频、语音四条线齐活。
+PaiCLI（我做的一个类似 Claude Code 的命令行工具）也接上了 Agnes。
 
-## 02、文本模型Agnes-2.0-Flash
+直接让Codex帮我们接入，完事后我们在 .env 中填入 .env 就行了。
 
-Agnes-2.0-Flash 是一个通用文本模型，覆盖对话、代码生成、知识问答、任务规划和工具调用。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260622081300.png)
 
-在 Claw-Eval 评测中，它的 Safety 得分达到 97.2、Robustness 得分 95.4，这两个维度衡量的是模型在对抗性输入下的稳定性和安全性，属于 Agent 场景下的硬指标。
-
-![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617074428.png)
-
-Claw-Eval 和传统 Benchmark 不同，评测的不是数学题和选择题，而是模型在真实 Agent 场景下的综合执行能力，包括工具调用准确性、多步骤规划和复杂上下文保持。
-
-![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617074458.png)
-
-是最接近 AI Agent 实战能力的评测。
-
-Agnes-2.0-Flash 已支持 1M 上下文，我在 PaiCLI 里设计了三个测试用例，分别验证长文档理解、代码生成和工具调用能力。
+PaiCLI 的底部做了一个 token 状态栏，会实时显示当前会话的 token 消耗和上下文占比。
 
 ![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617075413.png)
 
-第一个测 1M 上下文。我把 Spring AI 的官方文档（大约 15 万字）整份喂给 Agnes-2.0-Flash，然后问它"Spring AI 的 Tool Calling 和 MCP 的 Function Calling 在实现机制上有什么区别"。这个问题的答案散落在文档的不同章节里，需要模型把前面关于 Tool 注解的描述和后面关于 MCP 协议的细节关联起来才能回答准确。Agnes 给出的答案准确抓住了两者在设计层面的核心差异，引用的内容也能在原文档中对应上。换成 128K 上下文的模型，这份文档塞不进去，只能先做 RAG 检索再拼接，中间的信息损失不可避免。
+## 03、文本模型的 Agent 能力
 
-第二个测代码生成。我让它从零写一个完整的 Spring Boot REST API demo，要求包含用户 CRUD、JWT 认证和 Swagger 文档配置。生成的代码结构清晰，Controller、Service、Repository 分层合理，JWT 过滤器的实现也没有明显的安全漏洞。拿过来跑 `mvn spring-boot:run`，改一下数据库连接就能启动。我还追加让它加上参数校验和全局异常处理，补充的代码和前面生成的风格保持一致，没有出现前后矛盾的情况。对于一个免费模型，这个代码生成质量够用了。
+选模型最核心的判断标准不是"聊天质量好不好"，而是"能不能可靠地调工具、做规划、在长上下文里保持准确"。
 
-第三个测工具调用（Function Calling），这也是 Claw-Eval 重点考察的能力。PaiCLI 内置了 `read_file`、`write_file`、`execute_command`、`grep_code`、`web_search` 等工具，模型需要根据用户意图自主判断调用哪个。我测了一个复合场景，让它"查一下 PaiCLI 项目里有没有硬编码的 API Key，找到的话帮我改成从环境变量读取"。Agnes-2.0-Flash 先调 `grep_code` 搜关键词，再调 `read_file` 确认上下文，最后调 `write_file` 完成修改，整条工具调用链的参数格式全部正确，也没有凭空捏造工具名。对于编码助手来说，工具调用的准确性比对话质量更重要。
+Agnes-2.0-Flash 在 Claw-Eval 评测中 Safety 得分 97.2、Robustness 得分 95.4。
 
-这个模型免费前的价格是输入 $0.03/1M tokens、输出 $0.15/1M tokens，大概是同类模型价格的一半。现在直接免费了。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617074428.png)
 
-## 03、图片模型 Agnes-Image-2.1-Flash
+Claw-Eval 和 MMLU、HumanEval 这类传统 Benchmark 不是一个赛道。它专门面向 Agent 场景设计，考察的是模型在工具调用准确性、多步骤规划能力和对抗性输入下的综合表现。Safety 衡量模型面对恶意输入时的安全防护，Robustness 衡量输出的稳定性。
 
-Agnes-Image-2.1-Flash 在 Artificial Analysis 的图片质量评测中取得了 Elo 1191 的成绩（基于 4494 个样本的盲评数据）。这个评测用的是真实用户盲评机制，评测者不知道图片是哪个模型生成的，纯粹按画面质量打分。作为一个免费模型，能在以付费模型为主的榜单里站住脚，已经超出预期。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617074458.png)
 
-【此处插入Artificial Analysis 图片榜单截图：截图目标：证明 Agnes 图片模型在盲评榜单中的排名；关键词：Artificial Analysis、图片编辑、排名；建议位置：网页】
+两个维度都在 95 以上，意味着在 Agent 工作流里模型不容易被异常输入带偏，输出结果的一致性有保障。对于长时间自动运行的 Agent 任务来说，这是硬性要求。
 
-免费前的价格是 $3/1000 张图，相比海外部分图像模型 $30/1000 张的定价，Agnes 本来就便宜。现在连这 3 块钱都省了。
+### 1M 上下文实测
 
-图片模型的 API 同样兼容 OpenAI 格式，核心参数就四个。
+Agnes-2.0-Flash 支持 1M 上下文窗口。这个参数直接影响模型能处理多长的文档。
+
+为了验证这个能力，我在 PaiCLI 里做了一组测试。素材是面渣逆袭 Redis 篇，全文 4.6 万字。先让模型完整读取。
+
+>读一下：https://javabetter.cn/sidebar/sanfene/redis.html 这份文档的内容，稍后我会问你一些问题
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617083752.png)
+
+读完后提了一个关于 Redis 持久化的问题，RDB 和 AOF 的区别。这个问题的答案散布在文档的多个章节里，需要模型能从长文本中准确定位并组织信息。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617084010.png)
+
+注意底部状态栏。4.6 万字的文档加上对话内容，上下文占用率只有 18%。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617084042.png)
+
+剩余的 82% 意味着可以在这份文档的基础上继续追问几十轮，都不会触发压缩。
+
+上下文窗口大有什么实际好处？
+
+以代码审查为例，一个中等规模的 Java 项目，核心业务代码大约 10 万行。如果需要让模型理解一个跨多个模块的功能逻辑，可能需要同时加载 5-8 个源文件加上相关的配置文件。1M 上下文能一次性装下所有相关代码，模型不需要在多轮对话中反复回忆之前的文件内容。技术调研和长文档分析同理，窗口越大，信息丢失的风险越低。
+
+### Function Calling
+
+读取文档的过程中，PaiCLI 调用了 Web Fetch 和 Chrome DevTools MCP 两种工具。
+
+Agnes-2.0-Flash 自动识别了网页结构，选择了合适的抓取策略。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617084455.png)
+
+工具调用的准确性直接决定 Agent 工作流能不能跑通。
+
+具体来说，Agent 在执行任务时需要判断什么时候该调哪个工具、传什么参数、怎么处理返回结果。任何一个环节出错，整个任务链就会断掉。Agnes-2.0-Flash 在 PaiCLI 的这次测试中，工具选择和参数传递都没有出问题，返回结果的解析也很准确。
+
+对于想用免费模型搭 Agent 的开发者来说，Function Calling 的可靠性比文本生成的流畅度更关键。一个模型聊天聊得再好，如果调工具总出错，在 Agent 场景下基本没法用。
+
+## 04、图片和视频也做的不错
+
+### 文生图
+
+Agnes-Image-2.1-Flash 的接口同样兼容 OpenAI 的图片生成格式，核心参数只有四个。
 
 ```json
 {
@@ -123,111 +155,133 @@ Agnes-Image-2.1-Flash 在 Artificial Analysis 的图片质量评测中取得了 
 }
 ```
 
-size 支持 1K、2K、3K、4K 四档，ratio 支持 1:1、3:4、4:3、16:9、9:16、2:3、3:2、21:9 八种宽高比。本周 4K 输出能力上线后，最高可以生成 4096×4096 的超高清图像。
+size 有 1K、2K、3K、4K 四档可选（4K 目前灰度中），ratio 支持 1:1、3:4、4:3、16:9、9:16、2:3、3:2、21:9 八种宽高比。
 
-我在 PaiAgent 里用图片生成节点实测了几个场景。
+在 PaiAgent 的图片生成节点里跑两组测试。
 
-**文生图**，提示词是"一座城市夜景，高楼林立，霓虹闪烁，雨水反射着光影，赛博朋克风格，整体很有电影感"。出图速度大约 4-5 秒，画面的光影层次和雨水反射细节确实到位，赛博朋克的氛围感很到位。
+第一组是古风人像，提示词写的是"清晨的长安街道，一位穿汉服的年轻女子（约摸20岁）撑着油纸伞走过石板路，樱花花瓣飘落，背景是朦胧的木质建筑，整体色调温暖柔和，胶片质感"。
 
-【此处插入赛博朋克城市夜景生成图：截图目标：展示文生图的画面质量；关键词：赛博朋克、城市夜景、光影；建议位置：网页】
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617093503.png)
 
-**人像生成**，提示词是"一位面目沧桑的老人，高品质，照片级真实感，王家卫电影风格，使用柯达 Portra 800 胶卷拍摄，高对比度"。这张图我反复看了好几遍，皮肤纹理、光影过渡、胶片颗粒感都有，不像 AI 生成的"塑料感"。
+出图耗时约 10 秒。色调控制和光影层次表现不错，发丝和伞面的材质细节有真实感，花瓣的飘落动态没有 AI 生成常见的"定格悬浮"问题。
 
-【此处插入老人人像生成图：截图目标：展示人像生成的真实感；关键词：人像、胶片感、写实；建议位置：网页】
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617093540.png)
 
-**图生图**，先准备一张原图，让模型把人物表情改成自然的微微一笑。Agnes-Image-2.1-Flash 的编辑能力支持图改图、多图融合、局部修改、背景替换、风格转换、文字编辑和图像修复，总共七种编辑模式。我试了一下证件照场景，上传一张普通照片，提示词写"将图像生成一张蓝底证件照"，出来的结果背景替换得很干净，人物边缘没有明显的毛边。
+第二组是现代写实，提示词换成"一位戴着圆框眼镜的亚洲女生，坐在咖啡馆靠窗的位置，阳光透过玻璃打在脸上，自然光线，浅景深，照片级真实感，富士 Superia 400 胶片色调"。
 
-【此处插入证件照生成对比图：截图目标：展示图生图的编辑能力；关键词：证件照、背景替换、编辑；建议位置：网页】
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617093809.png)
 
-4K 能力上线后，对电商主图、产品海报、广告素材这类需要高分辨率输出的场景会更友好。只需要把 size 参数从 "1K" 改成 "4K"，其他代码不用动。免费生成 4K 图片，这个诚意确实够足。
+写实人像最考验皮肤质感和光影过渡两个能力。
 
-## 04、视频模型 Agnes-Video-2.0
+这张图在窗光照射区域的明暗分界处理得柔和，没有 AI 人像常见的过度磨皮效果。眼镜边框上有一道自然的高光反射，和窗外光源的方向一致。能做到光源方向统一，说明模型对物理光照的理解已经到了比较准确的程度。
 
-Agnes-Video-2.0 支持原生音画同步生成，输出分辨率可选 720P 和 1080P。免费前的价格是 $0.3/分钟，一条 10 秒的 720P 视频只需要 3 毛钱。
+两组测试跑下来，Agnes-Image-2.1-Flash 在色彩控制、人物细节和光影一致性这几个维度上的表现，放在免费模型里属于第一梯队。10 秒出图的速度也意味着在工作流里可以快速迭代提示词，不用等太久。
 
-在 Artificial Analysis 的 Video Leaderboard 上，Agnes-Video-2.0 同样进入了前列。
+### 图生图
 
-【此处插入Artificial Analysis 视频榜单截图：截图目标：证明 Agnes 视频模型在榜单中的排名；关键词：Video Leaderboard、排名、音画同步；建议位置：网页】
+Agnes-Image-2.1-Flash 的编辑能力覆盖七种模式，包括图改图、多图融合、局部修改、背景替换、风格转换、文字编辑和图像修复。
 
-视频模型的能力矩阵包括首帧生视频、首尾帧生视频、多帧生视频、多镜头内容生成、人物内容生成、景别切换、第一视角运镜和光影氛围塑造。
+拿上面那张咖啡馆照片做输入，提示词改成"将图像生成一张蓝底证件照"。
 
-我在 PaiAgent 的视频生成节点跑了三个测试。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617094139.png)
 
-第一个是纯文本生视频。提示词是"一场 GT3 赛车比赛，晴天日间，一辆 88 号红色法拉利领跑，远景、中景、特写来回切，要电影质感"。生成耗时大约 40-60 秒，出来的视频镜头切换确实有节奏感，从远景的赛道全貌切到中景的弯道超车再到特写的轮胎摩擦，配合原生音效，引擎轰鸣和轮胎尖叫都是模型自动生成的，整体氛围很到位。
+背景替换干净，头发边缘没有明显的抠图锯齿。
 
-【此处插入赛车视频截图：截图目标：展示文生视频的画面质量和镜头切换；关键词：赛车、镜头切换、电影质感；建议位置：网页】
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617094234.png)
 
-第二个测试的提示词是"一支摇滚乐队在演出，主唱挥手带动观众，背景射灯从暖黄逐渐过渡到冷蓝"。这条视频的亮点在光影过渡，射灯颜色的渐变很自然，不是那种突然跳色的效果。音画同出的特性也发挥了作用，背景里能听到隐约的音乐和观众呐喊。
+证件照场景对人物分割精度的要求很高，发丝区域是最容易翻车的地方，很多模型在这里会出现明显的白边或者锯齿状边缘。
 
-【此处插入摇滚乐队视频截图：截图目标：展示光影过渡和音画同步效果；关键词：摇滚乐队、光影过渡、音画同步；建议位置：网页】
+Agnes-Image-2.1-Flash 在这张图上的发丝处理比较自然，背景替换后的蓝底颜色也均匀一致，属于可以直接交付使用的水准。
 
-第三个是图生视频。我找来一张跑车的图片作为首帧，提示词让模型基于这张图片生成一段高速公路追逐大片。这个场景更考验模型对参考图的理解和运动连贯性。生成出来的视频在保持车辆外观一致性方面做得不错，运镜也有追逐片的紧迫感。
+七种编辑模式里，背景替换和风格转换的实用性最高。前者适合电商场景的产品换背景，后者适合社交媒体内容的风格统一。两种模式在免费额度下不限次数，可以批量处理。
 
-【此处插入图生视频效果截图：截图目标：展示首帧生视频的效果和运动连贯性；关键词：图生视频、追逐、运镜；建议位置：网页】
+4K 能力正式上线后，只需要把 size 参数从 `1K` 改成 `4K`，其他代码不动。电商主图、产品海报这类需要高分辨率输出的场景，免费 4K 会是一个很有竞争力的选项。
 
-关于音画同步，多说两句。市面上大部分视频模型生成的是纯画面，音频需要额外用 TTS 或音效模型来配。Agnes-Video-2.0 原生输出带音频的视频文件，引擎声、音乐声、环境音都是模型根据画面内容自动匹配的。赛车场景有引擎轰鸣，演唱会场景有乐器和人声，这种匹配精度在免费模型里确实少见。当然，原生音频的质量和专业音效工具比还有差距，但对于短视频、产品 Demo 这类场景已经够用了。
+### 文生视频
 
-PaiAgent 的视频生成节点内部实现了一个轮询机制，先提交生成任务拿到 taskId，然后每 5 秒查询一次任务状态，直到生成完成或超时（最长 5 分钟）。生成完的视频会自动转存到 MinIO 对象存储，返回可访问的 URL。整个流程对用户透明，在工作流画布上拖一个视频生成节点，填好提示词，点执行就行。视频生成的 API 和文本、图片不同，它是异步的，需要先提交再轮询。PaiAgent 把这个异步流程封装在了节点执行器内部，通过 SSE 协议向前端推送生成进度，用户在画布上能实时看到"生成中 30%""生成中 80%"这样的进度反馈。
+Agnes-Video-V2.0 有一个在免费模型里很少见的特性，原生音画同步。视频和音频在同一次推理中同步产出，不是先出画面再用 TTS 或音效模型配音。
 
-## 05、GitHub 生态和开发者采用
+Agnes-Video-V2.0 的能力覆盖面也比较广，包括首帧生视频、首尾帧生视频、多帧生视频、多镜头内容生成、人物内容生成、景别切换、第一视角运镜和光影氛围塑造。输出分辨率支持 720P 和 1080P 两档。
 
-Agnes 模型免费开放两周以来，GitHub 上已经出现了 30 多个围绕 Agnes AI 的开源项目（截至 2026-06-16 通过 GitHub API 检索）。项目类型涵盖 Agent Skill、ComfyUI 节点、CLI 工具、Web 应用和 API 网关，覆盖了 Claude Code、Codex、ComfyUI 等主流工具链。
+在 Artificial Analysis 的 Video Leaderboard 上也有一席之地。
 
-头部项目按 Star 数排序。
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617094739.png)
 
-- **agnes-ai-generation-skill**（102 Star，16 Fork），为 Claude Code/Codex 编写的 Agnes 多模态生成 Skill，支持文本、图片、视频一站式调用，MIT 许可，结构规范
-- **agnes-free-model-skills**（90 Star，10 Fork），Agnes 免费模型的 Skill 合集，针对不同场景做了预设配置
-- **comfyui-agnes-ai**（39 Star，6 Fork），ComfyUI 的 Agnes AI 节点，让 ComfyUI 用户可以在工作流中直接调用 Agnes 的图片和视频模型
-- **agnes-ai-skill**（35 Star），另一套 Skill 封装，特色是做了持久化认证和 OpenAI 风格工作流适配
-- **agnes-video-generator**（22 Star，3 Fork），一个带 Web UI 的视频生成工具，输入文本自动生成多场景视频
+在 PaiAgent 里测了一个场景。正好赶上 2026 世界杯，设计了一个进球庆祝的提示词，"世界杯赛场，一名球员进球后庆祝，镜头从正面特写缓缓拉远到中景，身后两名队友跑来拥抱，背景是虚化的看台和灯光，慢动作，电影质感"。
 
-【此处插入GitHub 项目列表截图：截图目标：展示 Agnes 在开发者社区的真实采用；关键词：GitHub、Skill、开源；建议位置：网页】
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617104835.png)
 
-还有一些更垂直的项目值得关注，比如 vimax-agnes 做了从创意到故事到脚本到图片再到视频的全流程自动化，O4OpenAI 用 Go 写了一个 API 网关，把 OpenAI/Anthropic 的兼容接口统一转换，已经接入了 Agnes。甚至有人用 Rust 写了 Agnes 的 CLI 工具。
+生成耗时约 120 秒。
 
-这些项目全部创建于 2026 年 6 月，生态非常年轻但增长很快。头部两个 Skill 项目最近一次更新是 6 月 15 日，说明社区在持续维护，不是"写完就丢"的 Demo 项目。开发者愿意花时间为一个模型写 Skill 和插件，本身就是对模型可用性的投票。
+镜头拉远的运动轨迹平滑，人物动作的帧间衔接没有明显卡顿。原生音频自动生成了球迷欢呼声和球员的喊叫，和画面节奏匹配得比较准确。
 
-## 06、调用数据和全模态布局
+市面上大部分视频模型生成的是纯画面，音频需要额外调 TTS 或音效模型来配。这意味着生成一段带声音的短视频，至少需要两次 API 调用，还得处理音频和画面同步的问题。Agnes-Video-V2.0 一次推理就输出完整的音视频文件，对于需要批量生成短视频的场景来说，流程简化了不少。
 
-Agnes AI 官方公布的数据，首周 Agnes-2.0-Flash 调用量超过 1 万亿 Token，Agnes-Image-2.1-Flash 首周生成超过 200 万张图片，Agnes-Video-2.0 首周生成超过 200 万秒视频。
+原生音频的质量和专业音效工具还有距离，但对于短视频内容、产品演示和社交媒体素材来说，够用了。
 
-进入第二周，全模态总 Token 调用量达到 3.12T。文本模型贡献约 1.9T，图片与视频模型合计约 1.2T。图片和视频的占比接近 40%，说明免费政策确实降低了开发者在视觉内容生成方面的试用门槛。之前需要算着成本来生成，现在可以大量尝试不同的提示词和参数组合，不用盯着余额干活。
+技术层面，PaiAgent 的视频节点实现了异步轮询机制，先提交任务拿到 taskId，然后每 5 秒查询一次状态，完成后自动将视频转存 MinIO 对象存储并返回可访问的 URL，最长等待 5 分钟。
 
-【此处插入Agnes 调用数据统计图：截图目标：证明模型的真实调用规模；关键词：3.12T、调用量、Token；建议位置：网页】
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617105954.png)
 
-Agnes 的全模态布局目前覆盖文本、图片、视频三条线，TTS（语音合成）能力预计本周也会灰度上线。到时候文本生成、图片生成、视频生成、语音合成四种能力就齐了，一套 API Key 全部搞定。
+在工作流画布上就是拖一个视频节点、填提示词、点执行，整个过程对用户透明。
 
-对于做内容自动化的团队来说，这意味着一条完整的生产线。Agent 写脚本 → 生成配图 → 生成视频 → 配上语音旁白，整个流程都可以在一个平台的 API 下完成。PaiAgent 的工作流编排正好适合串起这样的多模态流水线。
+从产品应用的角度看，Agnes-Video-V2.0 的免费策略对短视频创作者的吸引力很大。一段 10 秒的 1080P 视频生成，如果在付费平台上跑，成本在几毛到几块之间。创作者在打磨一条短视频的过程中，可能需要反复调整提示词、试不同的镜头语言，生成十几甚至几十次。这些试错成本加起来是一笔不小的开销。Agnes 把这个成本降到了零。
 
-### PaiAgent如何写到简历上？
+## 05、开发者生态已经起来了
 
-**项目名称**：PaiAgent
+一个模型有没有生命力，看开发者愿不愿意围绕它做东西。
 
-**项目简介**：企业级 AI 工作流可视化编排平台，通过拖拽式界面构建和执行 AI 工作流。
+Agnes 免费开放两周，GitHub 上已经出现了一批围绕 Agnes AI 构建的开源项目。类型覆盖 Skill 插件、CLI 工具、Web 应用和 ComfyUI 节点，对接了 Claude Code、Codex 等主流 Agent 工具。
 
-**技术栈**：Java 21、Spring Boot 3.4、Spring AI 1.0、LangGraph4j、React 18、TypeScript 5
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617110126.png)
 
-**核心职责**：
+几个有代表性的项目。
 
-- 基于 Spring AI 框架实现多模型统一接入层，支持 OpenAI、DeepSeek、通义千问等 10+ 模型供应商的热切换，接入成本从天级降低到分钟级
-- 设计并实现图片生成和视频生成节点执行器，视频节点支持异步任务提交与轮询机制，生成结果自动转存 MinIO 对象存储
+- **agnes-ai-generation-skill**（Yacey），把文生图、图生图、文生视频封装成 Skill，Claude Code 和 Codex 直接调用
+- **agnes-free-model-skills**（kangarooking），面向 Coding Agent 场景的多模态能力扩展
+- **comfyui-agnes-ai**（16nic），Agnes 的 ComfyUI 节点封装，设计师在熟悉的工作流里就能使用
+
+项目地址。
+
+- https://github.com/Yacey/agnes-ai-generation-skill
+- https://github.com/kangarooking/agnes-free-model-skills
+- https://github.com/16nic/comfyui-agnes-ai
+
+免费策略降低了开发者在视觉内容生成方面的试用门槛。以前图片和视频生成需要算着成本来调参，一张 4K 图或者一段 1080P 视频的生成费用都不便宜，调提示词的时候总得掂量一下。现在不用盯着余额了，大量尝试不同的提示词和参数组合，找到效果最好的那组配置再用到正式业务里。
+
+从生态繁荣的速度来看，免费策略的拉新效果很明显。两周内出现这么多第三方开源项目，说明开发者社区对"免费全模态 API"这件事的响应非常积极，有不少开发者已经在自己的产品和工具链里做了深度集成。
+
+### PaiAgent如何写到简历上
+
+**项目名称** PaiAgent
+
+**项目简介** 企业级 AI 工作流可视化编排平台，通过拖拽式界面构建和执行 AI 工作流。
+
+**技术栈** Java 21、Spring Boot 3.4、Spring AI 1.0、LangGraph4j、React 18、TypeScript 5
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617110535.png)
+
+**核心职责**
+
+- 基于 Spring AI 框架实现多模型统一接入层，支持 Agnes、DeepSeek 等 10+ 模型供应商的热切换
+- 设计并实现图片生成和视频生成节点执行器，视频节点采用异步任务提交与轮询机制，生成结果自动转存 MinIO 对象存储
 - 构建 DAG + LangGraph4j 双引擎工作流执行架构，支持条件分支、并行执行和循环节点，工作流编排复杂度覆盖 90% 以上的企业 Agent 场景
 - 实现 Skills 技能系统，支持 YAML 声明式技能定义和三级渐进式加载，开发一个新 Skill 的平均耗时从 2 小时降低到 15 分钟
-- 基于 SSE 协议实现工作流执行过程的实时流式反馈，前端可视化展示每个节点的执行状态、耗时和中间结果
+- 封装 OpenAI 兼容协议适配层，新增模型供应商只需配置 Base URL 和模型名称，无需修改核心代码
 
 ## ending
 
-两周前还在纠结 API 账单怎么控制
-现在文本、图片、视频三条线全部免费，不限量
-PaiAgent 工作流里的每个节点都换上了 Agnes 的模型
-跑了上百次测试，一分钱没花
+每个月的 Token 账单，Claude 和 Codex 占大头。
 
-4K 图片生成本周上线
-1M 上下文本周上线
-TTS 语音合成也快了
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260616163657.png)
 
-【一套 API Key 管文本图片视频语音四条线，省下来的钱，够我请团队吃顿好的了。】
+Agnes 接进来之后，PaiAgent 工作流里文本、图片、视频三种节点的调用成本归零了。连续跑了一周，余额界面始终显示零消耗。工作流调试从"每次执行都在烧钱"变成了"随便跑"。
 
-Agnes AI 的 API 文档：https://agnes-ai.com/doc
-Agnes API 控制台：https://platform.agnes-ai.com
-PaiAgent 项目教程：https://paicoding.com
+对 token 有需求的小伙伴可以冲一波，尤其是做 Agent 开发、短视频生成和电商图片处理的，免费模型的质量已经能支撑实际业务了。
+
+![](https://cdn.paicoding.com/stutymore/agnes-ai-free-model-review-20260617110739.png)
+
+【省下来的钱不够改变世界，但够让我每天多喝一杯手冲。】
+
+- Agnes AI 控制台 https://platform.agnes-ai.com
+- Agnes AI API 文档 https://agnes-ai.com/doc
