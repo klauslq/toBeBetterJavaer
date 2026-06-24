@@ -616,152 +616,7 @@ export default sidebar({
       ],
     },
     {
-      text: "三、AI Agent",
-      collapsible: true,
-      children: [
-        "sidebar/itwanger/ai/ai-agent-xuexiluxian",
-        {
-          text: "3.1 Claude Code",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/learn-claude-code",
-          ],
-        },
-        {
-          text: "3.2 Codex",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/codex-desktop-review",
-            "sidebar/itwanger/ai/codex-april-2026-deep-review",
-            "sidebar/itwanger/ai/codex-chatgpt-mobile",
-            "sidebar/itwanger/ai/codex-gpt54-chrome-devtools-mcp",
-          ],
-        },
-        {
-          text: "3.3 Harness",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/agent-cli-harness-opus",
-            "sidebar/itwanger/ai/agent-harness-engineering",
-            "sidebar/itwanger/ai/harness-engineering-review",
-            "sidebar/itwanger/ai/openharness-review",
-          ],
-        },
-        {
-          text: "3.4 IDEA插件",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/idea-codex",
-            "sidebar/itwanger/ai/cc-gui-idea",
-            "sidebar/itwanger/ai/intellij-idea-ai-agent-review",
-            "sidebar/itwanger/ai/feisuan-javaai-agent-review",
-          ],
-        },
-        {
-          text: "3.5 Qoder",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/qoder-1-0-quest-review",
-            "sidebar/itwanger/ai/qoder-experts-mode-ceping",
-            "sidebar/itwanger/ai/qoder-skills-shice",
-            "sidebar/itwanger/ai/qoderwork-review",
-          ],
-        },
-        {
-          text: "3.6 Skills",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/6-skills-recommend",
-            "sidebar/itwanger/ai/agent-skills-top10",
-            "sidebar/itwanger/ai/claude-skills-quanwei-jiedu",
-            "sidebar/itwanger/ai/skills-yuanli-jiaocheng",
-          ],
-        },
-        {
-          text: "3.7 RAG",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/embedding-rerank-rag",
-          ],
-        },
-        {
-          text: "3.8 OpenClaw",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/openclaw-github-study-path",
-            "sidebar/itwanger/ai/openclaw-install-feishu",
-            "sidebar/itwanger/ai/openclaw-memory-system",
-            "sidebar/itwanger/ai/hermes-agent-context",
-          ],
-        },
-        {
-          text: "3.9 LLM",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/deepseek-v4",
-            "sidebar/itwanger/ai/glm-5-1-new",
-            "sidebar/itwanger/ai/glm51-vs-deepseekv4",
-            "sidebar/itwanger/ai/kimi-k25-shice",
-          ],
-        },
-        {
-          text: "3.10 面试篇",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/claude-agent-principle",
-            "sidebar/itwanger/ai/claude-code-mythos",
-            "sidebar/itwanger/ai/interviewer-learn-claude-code",
-            "sidebar/itwanger/ai/agent-mianshi",
-            "sidebar/itwanger/ai/anshui-yin-mianshi",
-            "sidebar/itwanger/ai/skills-mianshi-hangye",
-            "sidebar/itwanger/ai/rag-interview-questions",
-            "sidebar/itwanger/ai/paismart-rag-interview",
-            "sidebar/itwanger/ai/paismart-rag-mianshi",
-            "sidebar/itwanger/ai/rag-mysql-mianshi",
-            "sidebar/itwanger/ai/ai-mianshi-openclaw",
-            "sidebar/itwanger/ai/openclaw-interview-uninstall",
-            "sidebar/itwanger/ai/openclaw-jiagou-yuanli",
-            "sidebar/itwanger/ai/openclaw-memory-review",
-            "sidebar/itwanger/ai/openclaw-multi-agent",
-            "sidebar/itwanger/ai/langgraph4j-interview",
-            "sidebar/itwanger/ai/langgraph4j-paiagent",
-            "sidebar/itwanger/ai/paicli-interview-advanced",
-          ],
-        },
-        {
-          text: "3.11 AI工具",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/ai-tools-2026",
-            "sidebar/itwanger/ai/cli-revolution",
-            "sidebar/itwanger/ai/opencli-review",
-            "sidebar/itwanger/ai/skywork-desktop-review",
-          ],
-        },
-        {
-          text: "3.12 Token套餐",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/free-token-api-guide",
-            "sidebar/itwanger/ai/rtk-token-killer",
-            "sidebar/itwanger/ai/agent-plan-paiagent",
-            "sidebar/itwanger/ai/volcano-coding-plan",
-          ],
-        },
-        {
-          text: "3.13 其他",
-          collapsible: true,
-          children: [
-            "sidebar/itwanger/ai/agent-workflow-8steps",
-            "sidebar/itwanger/ai/ai-infra-six-keywords",
-            "sidebar/itwanger/ai/ai-opensource-new-era",
-            "sidebar/itwanger/ai/cdn-cert-auto-renew",
-          ],
-        },
-      ],
-    },
-    {
-      text: "四、Java进阶",
+      text: "三、Java进阶",
       collapsible: true,
       children: [
         {
@@ -977,7 +832,7 @@ export default sidebar({
       ],
     },
     {
-      text: "五、MySQL",
+      text: "四、MySQL",
       collapsible: true,
       prefix: "mysql/",
       children: [
@@ -996,7 +851,7 @@ export default sidebar({
       ],
     },
     {
-      text: "六、Redis",
+      text: "五、Redis",
       collapsible: true,
       prefix: "redis/",
       children: [
@@ -1006,7 +861,7 @@ export default sidebar({
       ],
     },
     {
-      text: "七、计算机基础",
+      text: "六、计算机基础",
       collapsible: true,
       prefix: "cs/",
       children: [
@@ -1017,6 +872,151 @@ export default sidebar({
         {
           text: "计算机网络",
           link: "wangluo",
+        },
+      ],
+    },
+    {
+      text: "七、AI Agent",
+      collapsible: true,
+      children: [
+        "sidebar/itwanger/ai/ai-agent-xuexiluxian",
+        {
+          text: "7.1 Claude Code",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/learn-claude-code",
+          ],
+        },
+        {
+          text: "7.2 Codex",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/codex-desktop-review",
+            "sidebar/itwanger/ai/codex-april-2026-deep-review",
+            "sidebar/itwanger/ai/codex-chatgpt-mobile",
+            "sidebar/itwanger/ai/codex-gpt54-chrome-devtools-mcp",
+          ],
+        },
+        {
+          text: "7.3 Harness",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/agent-cli-harness-opus",
+            "sidebar/itwanger/ai/agent-harness-engineering",
+            "sidebar/itwanger/ai/harness-engineering-review",
+            "sidebar/itwanger/ai/openharness-review",
+          ],
+        },
+        {
+          text: "7.4 IDEA插件",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/idea-codex",
+            "sidebar/itwanger/ai/cc-gui-idea",
+            "sidebar/itwanger/ai/intellij-idea-ai-agent-review",
+            "sidebar/itwanger/ai/feisuan-javaai-agent-review",
+          ],
+        },
+        {
+          text: "7.5 Qoder",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/qoder-1-0-quest-review",
+            "sidebar/itwanger/ai/qoder-experts-mode-ceping",
+            "sidebar/itwanger/ai/qoder-skills-shice",
+            "sidebar/itwanger/ai/qoderwork-review",
+          ],
+        },
+        {
+          text: "7.6 Skills",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/6-skills-recommend",
+            "sidebar/itwanger/ai/agent-skills-top10",
+            "sidebar/itwanger/ai/claude-skills-quanwei-jiedu",
+            "sidebar/itwanger/ai/skills-yuanli-jiaocheng",
+          ],
+        },
+        {
+          text: "7.7 RAG",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/embedding-rerank-rag",
+          ],
+        },
+        {
+          text: "7.8 OpenClaw",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/openclaw-github-study-path",
+            "sidebar/itwanger/ai/openclaw-install-feishu",
+            "sidebar/itwanger/ai/openclaw-memory-system",
+            "sidebar/itwanger/ai/hermes-agent-context",
+          ],
+        },
+        {
+          text: "7.9 LLM",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/deepseek-v4",
+            "sidebar/itwanger/ai/glm-5-1-new",
+            "sidebar/itwanger/ai/glm51-vs-deepseekv4",
+            "sidebar/itwanger/ai/kimi-k25-shice",
+          ],
+        },
+        {
+          text: "7.10 面试篇",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/claude-agent-principle",
+            "sidebar/itwanger/ai/claude-code-mythos",
+            "sidebar/itwanger/ai/interviewer-learn-claude-code",
+            "sidebar/itwanger/ai/agent-mianshi",
+            "sidebar/itwanger/ai/anshui-yin-mianshi",
+            "sidebar/itwanger/ai/skills-mianshi-hangye",
+            "sidebar/itwanger/ai/rag-interview-questions",
+            "sidebar/itwanger/ai/paismart-rag-interview",
+            "sidebar/itwanger/ai/paismart-rag-mianshi",
+            "sidebar/itwanger/ai/rag-mysql-mianshi",
+            "sidebar/itwanger/ai/ai-mianshi-openclaw",
+            "sidebar/itwanger/ai/openclaw-interview-uninstall",
+            "sidebar/itwanger/ai/openclaw-jiagou-yuanli",
+            "sidebar/itwanger/ai/openclaw-memory-review",
+            "sidebar/itwanger/ai/openclaw-multi-agent",
+            "sidebar/itwanger/ai/langgraph4j-interview",
+            "sidebar/itwanger/ai/langgraph4j-paiagent",
+            "sidebar/itwanger/ai/paicli-interview-advanced",
+          ],
+        },
+        {
+          text: "7.11 AI工具",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/ai-tools-2026",
+            "sidebar/itwanger/ai/cli-revolution",
+            "sidebar/itwanger/ai/opencli-review",
+            "sidebar/itwanger/ai/skywork-desktop-review",
+          ],
+        },
+        {
+          text: "7.12 Token套餐",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/free-token-api-guide",
+            "sidebar/itwanger/ai/rtk-token-killer",
+            "sidebar/itwanger/ai/agent-plan-paiagent",
+            "sidebar/itwanger/ai/volcano-coding-plan",
+          ],
+        },
+        {
+          text: "7.13 其他",
+          collapsible: true,
+          children: [
+            "sidebar/itwanger/ai/agent-workflow-8steps",
+            "sidebar/itwanger/ai/ai-infra-six-keywords",
+            "sidebar/itwanger/ai/ai-opensource-new-era",
+            "sidebar/itwanger/ai/cdn-cert-auto-renew",
+          ],
         },
       ],
     },
