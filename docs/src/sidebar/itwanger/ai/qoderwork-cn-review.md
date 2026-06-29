@@ -1,5 +1,5 @@
 ---
-title: 阿里QoderWork还是太超模了，Code as Design（附教程，超简单）
+title: 国产版Codex？阿里QoderWork有点东西，设计出来的Codex+Claude Code学习网站好看啊（附教程，超简单）
 shortTitle: QoderWork CN 全面评测
 description: QoderWork CN 全面评测，阿里 Qoder 桌面 AI 智能体实测，支持 Qwen3.7-Max、GLM-5.2 等多模型自由切换，Quest 架构 + 专家团模式 + 意识功能深度体验。 QoderWork 太顶了，无限画布设计出来的Codex网站，好看啊
 keywords:
@@ -22,9 +22,9 @@ date: 2026-06-23
 
 以至于很多小伙伴都在喊，什么时候能出点 Codex 的资料。
 
-![](https://cdn.paicoding.com/stutymore/qoderwork-cn-review-20260623194504.png)
-
-> 这里先给大家推荐一下张哥整理的开源仓库，整理了不少 Claude Code 和 Codex 的内容：https://github.com/stormzhang/ai-coding-guide
+> 推荐一下AI进阶之路，整理了不少 Claude Code 和 Codex 的教程（免费开源）：https://ai.javabetter.cn/
+>
+> ![](https://cdn.paicoding.com/stutymore/qoderwork-cn-review-20260629130002.png)
 
 但，必须但一下，国内很多很多很多小伙伴还是无法稳稳接住 Codex。
 
@@ -67,8 +67,6 @@ date: 2026-06-23
 >接下来，我将带你从安装到实践，全方位掌握 QoderWork 的使用技巧。走起～
 
 ## 01、安装 QoderWork CN
-
-访问 `https://qoder.com.cn/qoderwork`
 
 ![](https://cdn.paicoding.com/stutymore/qoderwork-cn-review-20260623202805.png)
 
