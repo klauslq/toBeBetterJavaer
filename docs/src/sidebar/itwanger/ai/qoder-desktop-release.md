@@ -1,5 +1,5 @@
 ---
-title: 阿里Qoder桌面版正式发布，直接给到夯！
+title: 阿里Qoder桌面版正式发布，直接给到夯。
 shortTitle: Qoder 桌面版正式发布
 description: Qoder Desktop 桌面版正式发布评测，Quest 独立视窗实战用 Qwen 3.7 夜间模式开发 PaiCLI TypeScript 版本，附夜间折扣省钱攻略。
 keywords:

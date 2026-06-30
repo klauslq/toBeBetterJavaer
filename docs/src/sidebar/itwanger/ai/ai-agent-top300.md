@@ -33,21 +33,33 @@ date: 2026-05-20
 Agent 是这轮 AI 面试的绝对 C 位。
 
 ### 1. 什么是 Agent？和直接调大模型 API 有什么本质区别？
+
 大模型只会“接收输入→生成输出”，Agent 在此基础上加了感知环境、自主决策、调用工具、迭代反馈的能力。一个是被动的问答机器，一个是能自己动手干活的智能体。
+
+题目答案：what-is-agent.md
+
+技术派：https://paicoding.com/what-is-agent
 
 🟢 基础 | `→ PaiCLI` | 字节、腾讯、阿里
 
-### 2. Agent 的核心架构由哪些组件构成？
-经典四件套：规划（Planning）、记忆（Memory）、工具调用（Tool Use）、行动（Action）。PaiCLI 四个都有：Plan-and-Execute 做规划、SQLite 存记忆、MCP 接工具、ReAct 循环执行行动。
+### 2. Agent和chatbot最大的区别是什么？如果让 ChatBot 进化成能自主完成任务的 Agent，需要补哪些核心能力？
+
+可以按一次任务闭环来回答：先理解用户目标并做规划（Planning），再维护上下文和长期记忆（Memory），按需选择外部工具（Tool Use），执行行动并根据观察结果继续迭代（Action/Observation）。
+
+落到 PaiCLI，就是 Plan-and-Execute 负责任务拆解，Memory 管理上下文和长期信息，MCP 接入外部工具，ReAct 循环把工具结果反馈回来继续决策。
 
 🟢 基础 | `→ PaiCLI` | 字节、阿里云
 
-### 3. Workflow、Agent、Tools 三个概念怎么区分？
-Tools 是原子能力（搜索、计算、读文件），Agent 是能自主决策调用 Tools 的智能体，Workflow 是多个 Agent 或步骤按预设流程编排。PaiAgent 就是 Workflow 层面的产品，PaiCLI 是 Agent 层面的产品，它们都调用各种 Tools。
+题目答案：agent-vs-chatbot.md
+
+### 3. Workflow 和 Agent 有什么区别？
+
+Agent 是能自主决策调用 Tools 的智能体，Workflow 是多个 Agent 或步骤按预设流程编排。PaiAgent 就是 Workflow 层面的产品，PaiCLI 是 Agent 层面的产品，它们都调用各种 Tools。
 
 🟢 基础 | `→ PaiCLI（Agent）`
 
-### 4. 什么是 ReAct 框架？思考-行动-观察循环怎么落地的？
+### 4. 到底什么是 ReAct？
+
 面试出现频率最高的一道，没有之一。能说清 Thought→Action→Observation 的循环机制是及格线，能讲清自己项目里怎么控制最大迭代次数、怎么处理工具返回异常才是加分项。
 
 🟡 进阶 | `→ PaiCLI` | 淘天、腾讯、字节、百度
