@@ -20,15 +20,9 @@ date: 2026-03-26
 
 可以在idea中爽用Claude Code。
 
-刚好 DeepSeek V4 pro 大降价，我就想着，能不能在 CC GUI 中配置上 DeepSeek V4 的 API key，然后爽用起来。
-
-![](https://cdn.paicoding.com/stutymore/cc-gui-idea-20260428093245.png)
-
-2.5折，比打10折确实优惠得多😄
+我就想着，能不能在 CC GUI 中配置上 DeepSeek V4 的 API key，然后爽用起来。
 
 从我之前发的内容来看，用 idea 的小伙伴还是非常多的，尤其是后端开发，离不开IntelliJ IDEA啊，查看代码、调试还是方便。
-
-![](https://cdn.paicoding.com/paicoding/b4e9549efec0f2f1111ef13452b2efc5.png)
 
 索性今天我们就来实践一把，手把手带大家体验。
 

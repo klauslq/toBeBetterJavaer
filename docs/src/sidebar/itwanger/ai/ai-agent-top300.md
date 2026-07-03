@@ -50,17 +50,26 @@ Agent 是这轮 AI 面试的绝对 C 位。
 
 🟢 基础 | `→ PaiCLI` | 字节、阿里云
 
-题目答案：agent-vs-chatbot.md
+题目答案：agent-chatbot-difference.md
+
+技术派：https://paicoding.com/agent-chatbot-difference
+
 
 ### 3. Workflow 和 Agent 有什么区别？
 
 Agent 是能自主决策调用 Tools 的智能体，Workflow 是多个 Agent 或步骤按预设流程编排。PaiAgent 就是 Workflow 层面的产品，PaiCLI 是 Agent 层面的产品，它们都调用各种 Tools。
 
+题目答案： workflow-vs-agent.md
+
+技术派：https://paicoding.com/workflow-vs-agent
+
 🟢 基础 | `→ PaiCLI（Agent）`
 
-### 4. 到底什么是 ReAct？
+### 4. 到底什么是 ReAct？和 CoT有什么区别？
 
 面试出现频率最高的一道，没有之一。能说清 Thought→Action→Observation 的循环机制是及格线，能讲清自己项目里怎么控制最大迭代次数、怎么处理工具返回异常才是加分项。
+
+题目答案：what-is-react.md
 
 🟡 进阶 | `→ PaiCLI` | 淘天、腾讯、字节、百度
 

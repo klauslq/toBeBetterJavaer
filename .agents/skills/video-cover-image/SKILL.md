@@ -1,6 +1,6 @@
 ---
 name: video-cover-image
-description: Generate paired vertical and horizontal short-video cover images from toBeBetterJavaer video scripts or AI/Java technical topics. Use when the user asks for 视频封面, 封面图, 横版和竖版, 小红书/抖音/B站/快手封面, or wants a repeatable cover workflow for Markdown scripts under docs/src/ai/video/.
+description: Generate paired vertical and horizontal short-video cover images from toBeBetterJavaer video scripts or AI/Java technical topics. Use when the user asks for 视频封面, 封面图, 横版和竖版, 小红书/抖音/B站/快手封面, pure-text covers with 白色大字+黄色小字, reference-image-matched covers, or wants a repeatable cover workflow for Markdown scripts under docs/src/ai/video/.
 ---
 
 # Video Cover Image
@@ -15,6 +15,8 @@ Create a matched cover pair for one technical short-video script:
 By default, generate both covers as a pair. Generate only one ratio when the user explicitly says only/只要/单独生成 one specific ratio.
 
 Use the `itwanger-image` style rules when available. Keep prompt context isolated: use only the target script, user-provided reference images, and this skill's rules. Do not pull in unrelated browser/editor/window/history content.
+
+If the user provides a reference image or asks for `纯文本`, `白色大字+黄色小字`, `黑色/黑灰背景`, or `参考图这种布局`, use the pure-text reference style below instead of the default illustrated style. Use deterministic rendering for this mode so Chinese text stays exact.
 
 ## Workflow
 
@@ -32,30 +34,48 @@ Use the `itwanger-image` style rules when available. Keep prompt context isolate
    - Visual metaphor: one simple icon or scene, such as Agent flow, checklist, tool call, loop, search, or error trap.
    - Presenter expression: match the topic while keeping the same 二哥 character. Use confident/focused for architecture and collaboration, serious/alert for pitfalls and bugs, excited/energetic for tutorials and capability reveals, and skeptical/surprised for wrong-answer interview hooks.
 
-3. Keep text short enough for image generation.
+3. Select the cover mode.
+   - Use pure-text reference mode when the user asks for a text-only cover, provides a black/gray reference card, or corrects toward "one white title line plus yellow keyword lines".
+   - Use default illustrated mode for normal knowledge-zone covers with presenter, icon, and blue-sky energy.
+
+4. Keep text short enough for image generation.
    - Prefer 3-5 visible text blocks total.
    - Avoid long Chinese sentences, dense labels, and small body text.
    - If exact wording is critical, simplify the generated text first; if still unstable, generate a cleaner illustration and add text in a separate deterministic editing step.
 
-4. Generate the vertical cover first with `image_gen`.
+5. For pure-text reference mode, render with `scripts/render_text_cover.py`.
+   - Title: one short white line, usually the exact interview question or topic, such as `什么是 ReAct?`.
+   - Yellow text: one or two keyword lines. If one line is too small, split into two lines; do not force everything onto one line.
+   - Example command:
+
+```bash
+python3 .agents/skills/video-cover-image/scripts/render_text_cover.py \
+  --title "什么是 ReAct?" \
+  --line "Thought、Action、Observation" \
+  --line "CoT、工具调用、外部验证" \
+  --prefix "what-is-react-cover"
+```
+
+6. For default illustrated mode, generate the vertical cover first with `image_gen`.
    - Ratio: `3:4`, target size similar to `1086 x 1448`.
    - Composition: top title, central visual icon, presenter in lower/right area, bottom tag.
    - Apply the default high-impact blue-sky knowledge-cover style.
 
-5. Generate the horizontal cover with `image_gen`.
+7. For default illustrated mode, generate the horizontal cover with `image_gen`.
    - Ratio: `4:3`, target size similar to `1440 x 1080` or `1600 x 1200`.
    - Composition: left icon, center/right presenter, right or top punch lines.
    - Reuse the same title, punch lines, icon, character, color system, and topic framing as the vertical cover.
 
-6. Run a quick visual quality gate before final response.
+8. Run a quick visual quality gate before final response.
    - Aspect ratio is correct for each image.
    - The main topic is obvious at a glance.
    - Chinese text has no obvious garbling in the large title/punch lines.
-   - The presenter is the correct 二哥 cartoon: short hair, glasses, yellow shirt, dark tie.
+   - In pure-text mode: black/gray textured background, one bold white title, one or two large yellow keyword lines, no blue background, no icon, no presenter, no outer white UI frame.
+   - In default illustrated mode: the presenter is the correct 二哥 cartoon, short hair, glasses, yellow shirt, dark tie.
    - No female avatar, no unrelated fantasy costume, no real brand logo unless explicitly requested.
    - No outer frame, no rounded screenshot container, no dense small text.
 
-7. Deliver both images.
+9. Deliver both images.
    - Show both images with Markdown image tags.
    - Include absolute generated file paths and dimensions.
    - Do not move images into the repo unless the user explicitly asks.
@@ -69,6 +89,19 @@ Use the `itwanger-image` style rules when available. Keep prompt context isolate
 - 二哥 cartoon presenter: Q-version big head, short hair, glasses, yellow shirt, dark tie, holding a pointer or laptop.
 - Presenter expression changes with the topic, but the character identity stays fixed; avoid exaggerated meme faces, angry faces, horror expressions, or changing the presenter into a different person.
 - Knowledge-zone feel: normal, clean, platform-ready, not neon cyberpunk, not overly AI-looking.
+
+## Pure Text Reference Style
+
+Use this style when matching a text-only reference card:
+
+- Background: black/charcoal gray texture, center slightly lighter, edges darker. Avoid blue gradients, decorative symbols, characters, icons, or screenshots.
+- Typography: use a real bold Chinese font if available, preferably `Hiragino Sans GB W6`; fall back to `PingFang SC Semibold`. Avoid heavy faux-bold offsets that deform Chinese glyphs.
+- White title: one centered line, visually bold, roughly 75-86% of cover width.
+- Yellow keyword block: one or two centered lines. If one line makes the yellow text small, split to two lines. The whole yellow block should occupy roughly 20-23% of the reference card height.
+- Horizontal `4:3`: place the white title around 29-31% of height; place yellow lines around 52-63% of height.
+- Vertical `3:4`: place the white title around 34% of height; place yellow lines around 52-60% of height.
+- Keep the overall composition concentrated in the middle/upper-middle. Do not fill every corner; the reference layout relies on negative space.
+- Prefer concise keyword lines extracted from the script, such as `Thought、Action、Observation` and `CoT、工具调用、外部验证`.
 
 ## Prompt Pattern
 

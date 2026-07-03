@@ -24,3 +24,5 @@ plugins/
 docs/src/sidebar/itwanger/ai/mianshiya-ai-333.md
 /.playwright-cli
 /tmp
+/outputs
+/.codex_tmp
