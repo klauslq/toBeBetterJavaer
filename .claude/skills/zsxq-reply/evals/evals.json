@@ -1,0 +1,17 @@
+{
+  "skill_name": "zsxq-reply",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "看看星球今天有没有没回复的球友提问，挑一条出个回复草稿",
+      "expected_output": "扫描星球主题、确认二哥未回复、出符合风格规则（编号作答/全角引号/from 二哥.ai 署名/去AI味）的草稿，停在等待确认，不执行写入",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "有球友问：PaiCLI 的 ReAct 循环是怎么终止的？会不会死循环？帮我出个回复草稿",
+      "expected_output": "先读本地 /Users/itwanger/Documents/GitHub/paicli 源码核实终止条件，草稿引用真实机制但不出现自定义类名，带署名，停在等待确认",
+      "files": []
+    }
+  ]
+}
