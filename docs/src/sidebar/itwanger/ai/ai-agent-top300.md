@@ -119,6 +119,8 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 - 工具调用：调用外部 API、数据库、搜索引擎、代码执行环境等。
 - 结果处理：收集工具返回结果，进行必要的格式化和验证。
 
+题目答案：how-agent-works.md
+
 🟡 进阶 | `→ PaiCLI` | 字节、淘天、阿里云
 
 ### 9. Agent 上下文管理怎么做？怎么避免上下文爆炸？
