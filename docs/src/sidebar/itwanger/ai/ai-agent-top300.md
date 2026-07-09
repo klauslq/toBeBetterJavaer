@@ -121,12 +121,58 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 题目答案：how-agent-works.md
 
+技术派：https://paicoding.com/how-agent-works
+
 🟡 进阶 | `→ PaiCLI` | 字节、淘天、阿里云
 
-### 9. Agent 上下文管理怎么做？怎么避免上下文爆炸？
+### 9. Agent 怎么避免上下文爆炸？
 对话轮次一多，token 就炸了。常见方案有滑动窗口、摘要压缩、关键信息提取。
 
+题目答案：agent-context-explosion.md
+
+技术派：https://paicoding.com/agent-context-explosion
+
 🟡 进阶 | `→ PaiCLI` | 快手、百度、字节、阿里云、蚂蚁
+
+### 10. 为什么 LLM 的上下文窗口不能无限大？
+
+题目答案：llm-context-window-limit.md
+
+技术派：https://paicoding.com/llm-context-window-limit
+
+### 11. 什么是上下文工程（Context Engineering）?
+
+追问：为什么它正在取代提示工程（Prompt Engineering）？
+
+题目答案： what-is-context-engineering.md
+
+技术派：https://paicoding.com/what-is-context-engineering
+
+### 12. 什么是提示词工程（Prompt Engineering）? 
+
+题目答案： what-is-prompt-engineering.md
+
+技术派：https://paicoding.com/what-is-prompt-engineering
+
+### 13. 什么是Harness Engineering？
+
+题目答案： what-is-harness-engineering.md
+
+技术派：https://paicoding.com/what-is-harness-engineering
+
+## 14. 什么是 loop Engineering？
+
+题目答案： what-is-loop-engineering.md
+
+技术派：https://paicoding.com/what-is-loop-engineering
+
+## 15. 到底是什么是上下文窗口？
+
+## 16. 怎么让 LLM 返回结构化内容？比如说和Java对象的字段一一对应？
+
+关键信息：SpringAI 的 .entity()
+
+## 17. LLM 返回的内容被截断了怎么办？
 
 ### 10. Agent 的短期记忆和长期记忆分别怎么实现？
 短期记忆就是当前对话上下文，长期记忆需要持久化存储跨会话的事实。

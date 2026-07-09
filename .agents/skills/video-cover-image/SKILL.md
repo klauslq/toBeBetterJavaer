@@ -44,7 +44,8 @@ If the user provides a reference image or asks for `纯文本`, `白色大字+�
    - If exact wording is critical, simplify the generated text first; if still unstable, generate a cleaner illustration and add text in a separate deterministic editing step.
 
 5. For pure-text reference mode, render with `scripts/render_text_cover.py`.
-   - Title: one short white line, usually the exact interview question or topic, such as `什么是 ReAct?`.
+   - Title: prefer the article title or the exact interview question, such as `什么是上下文工程?`.
+   - If the white title becomes too small on one line, split it into two lines. Let the script auto-wrap, pass `\n` inside `--title`, or use repeated `--title-line` arguments for an intentional break.
    - Yellow text: one or two keyword lines. If one line is too small, split into two lines; do not force everything onto one line.
    - Example command:
 
@@ -96,7 +97,7 @@ Use this style when matching a text-only reference card:
 
 - Background: black/charcoal gray texture, center slightly lighter, edges darker. Avoid blue gradients, decorative symbols, characters, icons, or screenshots.
 - Typography: use a real bold Chinese font if available, preferably `Hiragino Sans GB W6`; fall back to `PingFang SC Semibold`. Avoid heavy faux-bold offsets that deform Chinese glyphs.
-- White title: one centered line, visually bold, roughly 75-86% of cover width.
+- White title: prioritize the article title or question. Use one centered line when it stays large; use two centered lines when a single line would shrink too much. The title block should visually read as the main article title, not a loose topic label.
 - Yellow keyword block: one or two centered lines. If one line makes the yellow text small, split to two lines. The whole yellow block should occupy roughly 20-23% of the reference card height.
 - Horizontal `4:3`: place the white title around 29-31% of height; place yellow lines around 52-63% of height.
 - Vertical `3:4`: place the white title around 34% of height; place yellow lines around 52-60% of height.
