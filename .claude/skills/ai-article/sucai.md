@@ -1,35 +1,23 @@
-标题：本科生最佳就业城市排行榜出炉。
+标题：字节绩效迎来大调整。
 
-对标我之前写的文章（公众号）：https://mp.weixin.qq.com/s/l5f3Z7kOp7rHPChR9S2nKA
+素材来源1：https://mp.weixin.qq.com/s/4SAiK_RQHjpK9hCSuvAjwQ
 
-麦可思研究院上周发布了《中国本科生就业报告》，覆盖19.5万份2025届毕业生样本。
+素材来源2：https://mp.weixin.qq.com/s/ywmtyIseEruuF5Yn4k2_BQ
 
-![](https://cdn.paicoding.com/stutymore/sucai-20260708084704.png)
+具体变了什么？两条。
 
-灵感来源文章：https://mp.weixin.qq.com/s/0SM26h9eospzKjc1TJC90Q
+第一，E及以上绩效同学的半年激励力度加大了。原来就有半年奖，这次调整的是规则——计算基数从月薪扩到了月总包，月薪加上每月的期权和RSU，池子变大了。
 
-上一次我们写的比较好的文章：deepseek-hiring-ai-era.md
+第二，字节范和领导力原则在绩效评级里的权重进一步明确。
 
-拿我之前呆过的苏州来说吧。
+整个激励池子实打实变大了。
 
-搜“AI Agent”职位，来看看 JD，这也是接下来几年我们应该努力奋斗的方向：
+第一，以后比offer，不能只看月薪了。
 
-负责 AI Agent 智能体的系统研发，探索大模型在复杂任务自动化和企业级 AI 应用中的落地。
+第二，期权变成真金白银。
 
- 主要工作包括：
-1. 设计和开发 AI Agent 系统，实现复杂任务⾃动化执⾏
-2. 构建 LLM Tool Use / Function Calling 能⼒
-3. 研发 AI Workflow / 自动化流程系统
-4. 设计多 Agent 协作架构，探索上下文⼯程实践
-5. 设计实现长短期记忆架构，提升上下文响应精度
-6. 参与 LLM 应用工程化落地与性能优化
+第三，软实力的考核权重在悄悄上升。
 
- 职位要求：
-1. 计算机，人工智能相关专业，本科及以上学历，1年及以上agent 系统开发经验
-2. 熟悉 Python / Go / TypeScript 等至少一种语言
-3. 熟知 Transformer架构及主流LLM技术栈，熟悉LLM微调、推理优化及评估方法论
-4. 具备 LLM 应用开发经验，理解 Prompt Engineering、RAG、Tool Calling 等技术
-5. 熟悉至少一种 Agent 框架，如：OpenClaw, LangChain, Dify
-6. 具备多智能体系统开发经验，掌握ReAct、CoT等推理框架
-7. 具备良好的沟通协作能力，能够与团队成员有效配合
-8. 具有责任心，能够承担压力，有较强的执行力
+然后我们来分析字节 AI Agent 招聘的特点，比如说这个AI Agent开发实习生：https://jobs.bytedance.com/campus/position/7637042346588457221/detail
+
+再比如说Agent研发实习生-抖音：https://jobs.bytedance.com/campus/position/7543188075808639250/detail

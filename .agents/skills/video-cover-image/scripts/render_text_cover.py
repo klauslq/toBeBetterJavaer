@@ -59,71 +59,6 @@ def fit_font(text, max_width, start_size, min_size):
     return make_font(min_size)
 
 
-def fit_multiline_font(lines, max_width, start_size, min_size):
-    for size in range(start_size, min_size - 1, -2):
-        font = make_font(size)
-        if all(text_bbox(line, font)[2] - text_bbox(line, font)[0] <= max_width for line in lines):
-            return font
-    return make_font(min_size)
-
-
-def balanced_title_split(title):
-    title = title.strip()
-    if len(title) < 8:
-        return [title]
-
-    best_index = None
-    best_score = 10**9
-    midpoint = len(title) / 2
-    for index in range(2, len(title) - 1):
-        left = title[:index].strip()
-        right = title[index:].strip()
-        if not left or not right:
-            continue
-        score = abs(index - midpoint)
-        if title[index - 1] in "？?：:，,、 ":
-            score -= 2
-        if title[index] in "？?：:，,、 ":
-            score -= 1
-        if title[index - 1].isascii() and title[index].isascii() and title[index - 1].isalnum() and title[index].isalnum():
-            score += 100
-        if score < best_score:
-            best_score = score
-            best_index = index
-
-    if best_index is None:
-        return [title]
-    return [title[:best_index].strip(), title[best_index:].strip()]
-
-
-def title_lines_from_args(title, forced_title_lines):
-    if forced_title_lines:
-        return [line.strip() for line in forced_title_lines if line.strip()]
-    normalized = title.replace("\\n", "\n").strip()
-    if "\n" in normalized:
-        return [line.strip() for line in normalized.splitlines() if line.strip()]
-    return [normalized]
-
-
-def choose_title_layout(title_lines, max_width, start_size, min_size):
-    if len(title_lines) > 1:
-        return title_lines, fit_multiline_font(title_lines, max_width, start_size, min_size)
-
-    title = title_lines[0]
-    single_font = fit_font(title, max_width, start_size, min_size)
-    if single_font.size >= int(start_size * 0.88):
-        return [title], single_font
-
-    split_lines = balanced_title_split(title)
-    if len(split_lines) == 1:
-        return [title], single_font
-
-    split_font = fit_multiline_font(split_lines, max_width, start_size, min_size)
-    if split_font.size > single_font.size + 6:
-        return split_lines, split_font
-    return [title], single_font
-
-
 def charcoal_background(width, height, seed):
     random.seed(seed)
     base = Image.new("RGBA", (width, height), DARK)
@@ -178,26 +113,16 @@ def draw_centered(image, y, text, font, color, shadow_dx=5, shadow_dy=6):
     draw.text((x, y), text, font=font, fill=color, anchor="mt")
 
 
-def draw_centered_block(image, center_y, lines, font, color, shadow_dx=5, shadow_dy=6):
-    heights = [text_bbox(line, font)[3] - text_bbox(line, font)[1] for line in lines]
-    gap = int(font.size * 0.16)
-    total_height = sum(heights) + gap * (len(lines) - 1)
-    y = int(center_y - total_height / 2)
-    for line, line_height in zip(lines, heights):
-        draw_centered(image, y, line, font, color, shadow_dx, shadow_dy)
-        y += line_height + gap
-
-
-def render(width, height, title_lines, lines, vertical):
+def render(width, height, title, lines, vertical):
     image = charcoal_background(width, height, 202 if vertical else 101)
-    title_lines, title_font = choose_title_layout(
-        title_lines,
+    title_font = fit_font(
+        title,
         int(width * (0.88 if vertical else 0.86)),
         int(height * (0.094 if vertical else 0.137)),
         int(height * (0.067 if vertical else 0.100)),
     )
-    title_center_y = int(height * (0.385 if vertical else 0.36))
-    draw_centered_block(image, title_center_y, title_lines, title_font, WHITE)
+    title_y = int(height * (0.339 if vertical else 0.292))
+    draw_centered(image, title_y, title, title_font, WHITE)
 
     if not lines:
         return image.convert("RGB")
@@ -210,10 +135,7 @@ def render(width, height, title_lines, lines, vertical):
     if len(lines) == 1:
         ys = [int(height * (0.55 if vertical else 0.54))]
     else:
-        if len(title_lines) > 1:
-            top = height * (0.56 if vertical else 0.58)
-        else:
-            top = height * (0.52 if vertical else 0.52)
+        top = height * (0.52 if vertical else 0.52)
         gap = height * (0.079 if vertical else 0.104)
         ys = [int(top + index * gap) for index in range(len(lines))]
 
@@ -225,21 +147,16 @@ def render(width, height, title_lines, lines, vertical):
 
 def main():
     parser = argparse.ArgumentParser(description="Render black/gray pure-text video covers.")
-    parser.add_argument("--title")
-    parser.add_argument("--title-line", action="append", default=[])
+    parser.add_argument("--title", required=True)
     parser.add_argument("--line", action="append", default=[])
     parser.add_argument("--prefix", default="video-cover")
     parser.add_argument("--out-dir", default=str(Path.home() / "Downloads"))
     args = parser.parse_args()
-    if not args.title and not args.title_line:
-        parser.error("--title or --title-line is required")
-
-    title_lines = title_lines_from_args(args.title or "", args.title_line)
 
     out_dir = Path(args.out_dir).expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
-    horizontal = render(1440, 1080, title_lines, args.line, vertical=False)
-    vertical = render(1080, 1440, title_lines, args.line, vertical=True)
+    horizontal = render(1440, 1080, args.title, args.line, vertical=False)
+    vertical = render(1080, 1440, args.title, args.line, vertical=True)
 
     horizontal_path = out_dir / f"{args.prefix}-horizontal-4x3.png"
     vertical_path = out_dir / f"{args.prefix}-vertical-3x4.png"
