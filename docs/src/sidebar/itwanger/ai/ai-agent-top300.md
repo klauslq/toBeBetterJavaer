@@ -168,6 +168,10 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 ## 15. 为什么LLM没有记忆？
 
+题目答案： why-llm-has-no-memory.md
+
+技术派：https://paicoding.com/why-llm-has-no-memory
+
 ## 16. 怎么样才能让LLM拥有记忆？
 
 ## 15. 到底是什么是上下文窗口？
