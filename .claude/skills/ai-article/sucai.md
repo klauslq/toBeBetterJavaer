@@ -1,1 +1,9 @@
-标题：面试官：“都 GPT-5.6 了，你说说你的优势是什么？”，我笑了：“没经验的人，GPT-5.6/Fable 5 写的代码也是一坨。”，面试官：“细聊经验”
+标题：Claude Code 爽用 Qwen3.6，Token 不限量。
+
+可以用飞书 CLI 读取甲方要求：https://my.feishu.cn/wiki/FRpOwJO5Hipj7Ak9vSIcRdR5nkW?renamingWikiNode=true
+
+然后根据甲方的要求撰写本次测评文章。
+
+参考文章：https://mp.weixin.qq.com/s/PlxEXAhaJFtqe4t9WSH40A
+
+至于case，我们再商量，搞一些企业级的应用场景。

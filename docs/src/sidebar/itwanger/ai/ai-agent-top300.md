@@ -140,19 +140,19 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 技术派：https://paicoding.com/llm-context-window-limit
 
-### 11. 什么是上下文工程（Context Engineering）?
+### 11. 什么是提示词工程（Prompt Engineering）? 
+
+题目答案： what-is-prompt-engineering.md
+
+技术派：https://paicoding.com/what-is-prompt-engineering
+
+### 12. 什么是上下文工程（Context Engineering）?
 
 追问：为什么它正在取代提示工程（Prompt Engineering）？
 
 题目答案： what-is-context-engineering.md
 
 技术派：https://paicoding.com/what-is-context-engineering
-
-### 12. 什么是提示词工程（Prompt Engineering）? 
-
-题目答案： what-is-prompt-engineering.md
-
-技术派：https://paicoding.com/what-is-prompt-engineering
 
 ### 13. 什么是Harness Engineering？
 
@@ -172,11 +172,21 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 技术派：https://paicoding.com/why-llm-has-no-memory
 
-## 16. 怎么样才能让LLM拥有记忆？
+## 16. 到底是什么是上下文窗口？
 
-## 15. 到底是什么是上下文窗口？
+题目答案： what-is-context-window.md
 
-## 16. 怎么让 LLM 返回结构化内容？比如说和Java对象的字段一一对应？
+技术派：https://paicoding.com/what-is-context-window
+
+## 17. 怎么样才能让Agent拥有记忆？
+
+题目答案：how-to-give-agent-memory.md
+
+技术派：https://paicoding.com/how-to-give-agent-memory
+
+## 18. Agent 的短期记忆怎么实现？
+
+## 18. 怎么让 LLM 返回结构化内容？比如说和Java对象的字段一一对应？
 
 关键信息：SpringAI 的 .entity()
 
