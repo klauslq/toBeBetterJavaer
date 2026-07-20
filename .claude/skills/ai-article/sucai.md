@@ -1,9 +1,23 @@
-标题：Claude Code 爽用 Qwen3.6，Token 不限量。
+标题：腾讯一面，我霸气反问："你说你们在做Agent项目，说说 SubAgent、Plan 模式、Skill 调用这些你们都是怎么做的？"面试官一直在擦汗。。
 
-可以用飞书 CLI 读取甲方要求：https://my.feishu.cn/wiki/FRpOwJO5Hipj7Ak9vSIcRdR5nkW?renamingWikiNode=true
 
-然后根据甲方的要求撰写本次测评文章。
+## content
 
-参考文章：https://mp.weixin.qq.com/s/PlxEXAhaJFtqe4t9WSH40A
+1. 介绍一下 PaiCLI 这个项目和流程？
+2. 有实现子 Agent 吗？
+3. 支持后台任务吗？
+4. 子 Agent 也支持 Plan 模式吗？
+5. 子 Agent 是怎么调用 Skill 的？
+2. skill分层体系是怎么做的，为什么这么设计？
+3. 用户输入怎么和相关skill匹配？
+4. 有skill沉淀机制么？还是只能用户自己构造？
+5. 长短期记忆怎么设计的？
+6. 为什么要静态长期记忆和动态长期记忆？
+7. 什么时候触发长期记忆存储，有没有出现用户长期记忆快速积累，存的过多？
+8. 大模型怎么决定长期记忆是否需要召回？
+9. 压缩机制是怎么做的？上下文窗口总token多大？触发上限为什么选这个值？
+10. 讲一下动态prompt和静态prompt？
+11. 模型底座是哪个？例如写一千行代码，需要消耗多少token?成本是多少？你用的百万token计费是多少？
+12. 你平时用你的PaiCLI么？
 
-至于case，我们再商量，搞一些企业级的应用场景。
+

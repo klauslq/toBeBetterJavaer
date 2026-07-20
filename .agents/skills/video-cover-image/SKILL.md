@@ -18,6 +18,8 @@ Use the `itwanger-image` style rules when available. Keep prompt context isolate
 
 If the user provides a reference image or asks for `纯文本`, `白色大字+黄色小字`, `黑色/黑灰背景`, or `参考图这种布局`, use the pure-text reference style below instead of the default illustrated style. Use deterministic rendering for this mode so Chinese text stays exact.
 
+For video covers, do not add copyright signatures, watermarks, corner marks, or small `©️沉默王二` labels unless the user explicitly asks for them. This cover-specific rule overrides any lower-level image-skill signature preference.
+
 ## Workflow
 
 1. Resolve exactly one script or topic.
@@ -73,6 +75,7 @@ python3 .agents/skills/video-cover-image/scripts/render_text_cover.py \
    - In pure-text mode: black/gray textured background, one bold white title, one or two large yellow keyword lines, no blue background, no icon, no presenter, no outer white UI frame.
    - In default illustrated mode: the presenter is the correct 二哥 cartoon, short hair, glasses, yellow shirt, dark tie.
    - No female avatar, no unrelated fantasy costume, no real brand logo unless explicitly requested.
+   - No copyright signature, watermark, corner mark, or small `©️沉默王二` label unless explicitly requested.
    - No outer frame, no rounded screenshot container, no dense small text.
 
 9. Deliver both images.
@@ -88,6 +91,7 @@ python3 .agents/skills/video-cover-image/scripts/render_text_cover.py \
 - One glowing white rounded square icon with a blue/purple technical symbol.
 - 二哥 cartoon presenter: Q-version big head, short hair, glasses, yellow shirt, dark tie, holding a pointer or laptop.
 - Presenter expression changes with the topic, but the character identity stays fixed; avoid exaggerated meme faces, angry faces, horror expressions, or changing the presenter into a different person.
+- No copyright signature or watermark on video covers by default.
 - Knowledge-zone feel: normal, clean, platform-ready, not neon cyberpunk, not overly AI-looking.
 
 ## Pure Text Reference Style
@@ -121,6 +125,7 @@ Vertical prompt outline:
 下一行黄色大字：{punch_line_2}
 底部小标签：{small_tag}
 要求：文字清楚，人物脸不被挡，安全边距足够，不要白底，不要外层边框，不要密集小字。
+不要添加版权签名、水印、角标或 `©️沉默王二` 小字。
 ```
 
 Horizontal prompt outline:
@@ -136,6 +141,7 @@ Horizontal prompt outline:
 黄色大字：{punch_line_1} / {punch_line_2}
 底部小标签：{small_tag}
 要求：中文清楚，人物脸不被挡，横版安全区充足，不要白底，不要外层边框，不要密集小字。
+不要添加版权签名、水印、角标或 `©️沉默王二` 小字。
 ```
 
 ## Extraction Examples

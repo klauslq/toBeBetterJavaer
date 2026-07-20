@@ -2,7 +2,7 @@
 
 ## 项目概况
 
-主要工作是写公众号文章，主要是和AI有关，Agent工具有关，可以是面试题、Agent工具测评。
+主要工作是写公众号文章，和AI有关，Agent有关，可以是面试题、Agent工具测评。
 
 ## 作者与项目
 
@@ -24,19 +24,16 @@
 
 ## 常用命令
 
-- `npm run sidebar:check` / `npm run sidebar:sync` — 校验/同步侧边栏配置
-- `npm run images:cdn` — mdnice 图片转 CDN 链接
 - 写作前先运行 `date "+%Y年%m月%d日"` 确认日期
 
 ## 写作工作流
 
-1. 出选题/搜热点 → topic-research Skill；写 AI 文章 → ai-article Skill；求职文 → job-article Skill；口播稿 → video-script Skill
-2. 侧边栏同步（`npm run sidebar:sync`）在部署到 javabetter.cn 时由用户统一处理，写完文章不需要主动执行
-3. 抓取微信公众号等需登录/动态渲染页面：用 Chrome DevTools MCP 或 web-access Skill，不用 WebFetch
+1. 写 AI 文章 → ai-article Skill；口播稿 → video-script Skill
+2. 抓取微信公众号等需登录/动态渲染页面：用 Chrome DevTools MCP 或 web-access Skill，不用 WebFetch
 
-## 硬约束
+## 约束
 
 - 文件名：小写字母 + 连字符，如 `my-tutorial.md`
-- 书面用语，语义准确；技术论述不口语化
+- 涉及到技术部分一定要严谨，用书面用语，语义要准确无误；
 - 正文（含文章、帖子、评论等一切非代码文本）禁用半角双引号 `"`，一律用全角双引号 “”；代码块和行内代码不受此限制
-- 模型相关数据以当前一代（Opus 4.8 / GPT-5.5）为准，禁止引用过时模型数据
+- 模型相关数据以当前一代（Opus 4.8 / GPT-5.6）为准，禁止引用过时模型数据

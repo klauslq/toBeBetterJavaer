@@ -22,7 +22,7 @@ def count_chinese_chars(text):
     text = re.sub(r'`[^`]*`', '', text)
 
     # 移除图片链接
-    text = re.sub(r'!\[\[](https://[^\)]+)\]\([^\)]+\)', '', text)
+    text = re.sub(r'!\[[^\]]*\]\([^\)]+\)', '', text)
 
     # 移除超链接 [text](url)
     text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', '', text)

@@ -172,7 +172,7 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 技术派：https://paicoding.com/why-llm-has-no-memory
 
-## 16. 到底是什么是上下文窗口？
+## 16. Agent 的上下文窗口是什么？
 
 题目答案： what-is-context-window.md
 
@@ -185,6 +185,15 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 技术派：https://paicoding.com/how-to-give-agent-memory
 
 ## 18. Agent 的短期记忆怎么实现？
+
+题目答案：agent-short-term-memory.md
+
+技术派：https://paicoding.com/agent-short-term-memory
+
+## 19. Claude Code的短期记忆是怎么实现的？
+
+
+## 20. Codex 的短期记忆是怎么实现的？
 
 ## 18. 怎么让 LLM 返回结构化内容？比如说和Java对象的字段一一对应？
 
