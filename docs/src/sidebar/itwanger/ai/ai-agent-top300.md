@@ -192,6 +192,9 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 ## 19. Claude Code的短期记忆是怎么实现的？
 
+题目答案：claude-code-short-term-memory.md
+
+技术派：https://paicoding.com/claude-code-short-term-memory
 
 ## 20. Codex 的短期记忆是怎么实现的？
 

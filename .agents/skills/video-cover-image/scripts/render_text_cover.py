@@ -155,10 +155,10 @@ def main():
 
     out_dir = Path(args.out_dir).expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
-    horizontal = render(1440, 1080, args.title, args.line, vertical=False)
+    horizontal = render(1920, 1080, args.title, args.line, vertical=False)
     vertical = render(1080, 1440, args.title, args.line, vertical=True)
 
-    horizontal_path = out_dir / f"{args.prefix}-horizontal-4x3.png"
+    horizontal_path = out_dir / f"{args.prefix}-horizontal-16x9.png"
     vertical_path = out_dir / f"{args.prefix}-vertical-3x4.png"
     horizontal.save(horizontal_path, quality=94)
     vertical.save(vertical_path, quality=94)
