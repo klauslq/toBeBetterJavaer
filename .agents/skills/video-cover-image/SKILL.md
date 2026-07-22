@@ -1,18 +1,19 @@
 ---
 name: video-cover-image
-description: Generate paired vertical and horizontal short-video cover images from toBeBetterJavaer video scripts or AI/Java technical topics. Use when the user asks for 视频封面, 封面图, 横版和竖版, 小红书/抖音/B站/快手封面, pure-text covers with 白色大字+黄色小字, reference-image-matched covers, or wants a repeatable cover workflow for Markdown scripts under docs/src/ai/video/.
+description: Generate matched 3:4, 16:9, and 4:3 short-video cover images from toBeBetterJavaer video scripts or AI/Java technical topics. Use when the user asks for 视频封面, 封面图, 横版和竖版, 小红书/抖音/B站/快手封面, pure-text covers with 白色大字+黄色小字, reference-image-matched covers, or wants a repeatable cover workflow for Markdown scripts under docs/src/ai/video/.
 ---
 
 # Video Cover Image
 
 ## Overview
 
-Create a matched cover pair for one technical short-video script:
+Create a matched three-cover set for one technical short-video script:
 
 - Vertical cover: `3:4`, for 小红书、抖音、快手 and mobile feeds.
-- Horizontal cover: `16:9`, for B站 and standard widescreen video thumbnails.
+- Widescreen cover: `16:9`, for B站 and standard widescreen video thumbnails.
+- Standard horizontal cover: `4:3`, for platforms or placements that prefer a less-wide thumbnail.
 
-By default, generate both covers as a pair. Generate only one ratio when the user explicitly says only/只要/单独生成 one specific ratio.
+By default, generate all three covers as one matched set. Generate fewer ratios only when the user explicitly says only/只要/单独生成 specific ratios.
 
 Use the `itwanger-image` style rules when available. Keep prompt context isolated: use only the target script, user-provided reference images, and this skill's rules. Do not pull in unrelated browser/editor/window/history content.
 
@@ -26,12 +27,12 @@ For video covers, do not add copyright signatures, watermarks, corner marks, or 
    - If the user provides a file path, read that file.
    - If the user gives a filename under `docs/src/ai/video/`, resolve it there.
    - If several files match, ask which one.
-   - If the user asks to batch a directory, process one file at a time and produce one vertical/horizontal pair per script.
+   - If the user asks to batch a directory, process one file at a time and produce one `3:4` / `16:9` / `4:3` set per script.
 
 2. Extract cover material from the script.
    - Topic: the exact subject and the mechanism, conflict, or question the script explains.
    - Main title: prefer one complete, click-driving question that names the subject and makes the video topic explicit, such as `Claude Code 的短期记忆是如何实现的？`. Avoid vague noun-only titles such as `短期记忆` or `自动压缩`.
-   - Secondary hook: keep only one short mechanism keyword, usually 2-6 Chinese characters, such as `摘要压缩`. Omit it when the main title is already sufficient.
+   - Secondary hook: omit it by default. Add at most one short mechanism keyword only when the user explicitly requests a label or the title cannot state the topic clearly on its own.
    - Visual metaphor: one self-explanatory mechanism scene that previews the answer without relying on labels, such as many message cards being compressed into one summary card.
    - Presenter expression: match the topic while keeping the same 二哥 character. Use confident/focused for architecture and collaboration, serious/alert for pitfalls and bugs, excited/energetic for tutorials and capability reveals, and skeptical/surprised for wrong-answer interview hooks.
 
@@ -40,9 +41,9 @@ For video covers, do not add copyright signatures, watermarks, corner marks, or 
    - Use default illustrated mode for normal knowledge-zone covers with presenter, icon, and blue-sky energy.
 
 4. Keep text short enough for image generation.
-   - Prefer exactly 2 visible text blocks: one dominant question-style main title and one short secondary hook. Use at most 3 blocks only when the topic cannot otherwise be understood.
+   - Prefer exactly 1 visible text block: one dominant question-style main title. Add one short secondary hook only when explicitly requested.
    - Let the main title wrap to 2-3 large lines when needed; do not shorten it into an ambiguous keyword pile.
-   - Avoid dense labels, small body text, repeated keywords, and multiple equal-weight slogans.
+   - Avoid dense labels, small body text, repeated keywords, bottom tags, and multiple equal-weight slogans.
    - Apply the thumbnail test: when viewed small, the title alone must state what the video explains, while the illustration should hint at the answer and create curiosity.
    - If exact wording is critical, simplify the generated text first; if still unstable, generate a cleaner illustration and add text in a separate deterministic editing step.
 
@@ -61,19 +62,24 @@ python3 .agents/skills/video-cover-image/scripts/render_text_cover.py \
 
 6. For default illustrated mode, generate the vertical cover first with `image_gen`.
    - Ratio: `3:4`, target size similar to `1086 x 1448`.
-   - Composition: dominant question title, central mechanism visual, presenter in lower/right area, and at most one short secondary hook.
+   - Composition: dominant question title, one compact visual cue, and presenter in lower/right area.
    - Apply the default high-impact blue-sky knowledge-cover style.
 
-7. For default illustrated mode, generate the horizontal cover with `image_gen`.
+7. Generate the `16:9` widescreen cover with `image_gen`.
    - Ratio: `16:9`, target size similar to `1920 x 1080` or `1600 x 900`.
-   - Composition: dominant question title, left-side mechanism visual, center/right presenter, and at most one short secondary hook.
-   - Reuse the same title, secondary hook, mechanism visual, character, color system, and topic framing as the vertical cover.
+   - Composition: dominant question title, one compact visual cue, and center/right presenter.
+   - Reuse the same title, visual cue, character, color system, and topic framing as the vertical cover.
 
-8. Run a quick visual quality gate before final response.
+8. Generate the `4:3` horizontal cover with `image_gen`.
+   - Ratio: `4:3`, target size similar to `1440 x 1080` or `1600 x 1200`.
+   - Recompose for the less-wide canvas; do not crop the `16:9` image mechanically.
+   - Reuse the same title, visual cue, character, color system, and topic framing as the other covers.
+
+9. Run a quick visual quality gate before final response.
    - Aspect ratio is correct for each image.
    - The main title names the exact subject and question; the video topic is obvious from the title alone at thumbnail size.
    - The illustration previews the mechanism or answer instead of adding unrelated decoration.
-   - There is no keyword pile: normally only one short secondary hook appears besides the main title.
+   - There is no keyword pile or bottom tag: only the main title appears unless the user explicitly requested a secondary hook.
    - Chinese text has no obvious garbling in the large title/punch lines.
    - In pure-text mode: black/gray textured background, one bold white title, one or two large yellow keyword lines, no blue background, no icon, no presenter, no outer white UI frame.
    - In default illustrated mode: the presenter is the correct 二哥 cartoon, short hair, glasses, yellow shirt, dark tie.
@@ -81,8 +87,8 @@ python3 .agents/skills/video-cover-image/scripts/render_text_cover.py \
    - No copyright signature, watermark, corner mark, or small `©️沉默王二` label unless explicitly requested.
    - No outer frame, no rounded screenshot container, no dense small text.
 
-9. Deliver both images.
-   - Show both images with Markdown image tags.
+10. Deliver all three images.
+   - Show the `3:4`, `16:9`, and `4:3` images with Markdown image tags.
    - Include absolute generated file paths and dimensions.
    - Do not move images into the repo unless the user explicitly asks.
 
@@ -90,8 +96,8 @@ python3 .agents/skills/video-cover-image/scripts/render_text_cover.py \
 
 - Bright blue sky/cloud background with speed lines or a clean energetic gradient.
 - Thick white English or Chinese title, black 3D shadow.
-- At most one short yellow Chinese secondary hook with black outline.
-- One glowing white rounded square icon with a blue/purple technical symbol.
+- No secondary hook or bottom tag by default; add one only when explicitly requested.
+- Use one compact visual cue. When it is a brand/app logo, keep it small: roughly 14-18% of canvas width on vertical covers and 8-12% on horizontal covers, so it remains an identifier rather than a main visual block.
 - 二哥 cartoon presenter: Q-version big head, short hair, glasses, yellow shirt, dark tie, holding a pointer or laptop.
 - Presenter expression changes with the topic, but the character identity stays fixed; avoid exaggerated meme faces, angry faces, horror expressions, or changing the presenter into a different person.
 - No copyright signature or watermark on video covers by default.
@@ -122,14 +128,13 @@ Vertical prompt outline:
 核心关键词：{keywords}
 画面风格：高冲击中文知识封面，明亮蓝色天空和云层背景，速度线和光效，厚重立体字。
 主视觉：二哥卡通讲解员，短发、眼镜、黄色衬衫、深色领带，表情根据主题设为 {expression}，拿教鞭指向 {visual_icon}。
-封面文字必须少而大，通常只保留两块：
+封面文字必须少而大，默认只保留一块：
 主标题（完整问题句，可分 2-3 行）：{main_title}
-黄色副文案（只留一个机制词）：{secondary_hook}
-要求：文字清楚，人物脸不被挡，安全边距足够，不要白底，不要外层边框，不要密集小字。
+要求：不要自动添加副标题、底部标签或额外关键词；文字清楚，人物脸不被挡，安全边距足够，不要白底，不要外层边框，不要密集小字。
 不要添加版权签名、水印、角标或 `©️沉默王二` 小字。
 ```
 
-Horizontal prompt outline:
+Horizontal `16:9` prompt outline:
 
 ```text
 生成一张横版中文短视频封面图，比例 16:9，适合B站及其他平台的标准横版视频封面。
@@ -137,10 +142,23 @@ Horizontal prompt outline:
 核心关键词：{keywords}
 画面风格：延续竖版同一套风格，明亮蓝色天空和云层背景，速度线和放射光效。
 横版构图：左侧 {visual_icon}，中间偏右二哥卡通讲解员，表情根据主题设为 {expression}，顶部或右侧放完整问题式主标题。
-封面文字必须少而大，通常只保留两块：
+封面文字必须少而大，默认只保留一块：
 主标题（完整问题句，可分 2-3 行）：{main_title}
-黄色副文案（只留一个机制词）：{secondary_hook}
-要求：中文清楚，人物脸不被挡，横版安全区充足，不要白底，不要外层边框，不要密集小字。
+要求：不要自动添加副标题、底部标签或额外关键词；中文清楚，人物脸不被挡，横版安全区充足，不要白底，不要外层边框，不要密集小字。
+不要添加版权签名、水印、角标或 `©️沉默王二` 小字。
+```
+
+Horizontal `4:3` prompt outline:
+
+```text
+生成一张横版中文短视频封面图，比例 4:3，适合偏标准画幅的视频缩略图。
+主题来自口播稿：{topic}
+核心关键词：{keywords}
+画面风格：延续同组封面的明亮蓝色天空、云层、速度线和放射光效。
+4:3 构图：重新安排标题、{visual_icon} 和二哥卡通讲解员，不要机械裁切 16:9 图片。
+封面文字默认只保留一块：
+主标题（完整问题句，可分 2-3 行）：{main_title}
+要求：不要自动添加副标题、底部标签或额外关键词；中文清楚，人物脸不被挡，安全区充足，不要白底，不要外层边框，不要密集小字。
 不要添加版权签名、水印、角标或 `©️沉默王二` 小字。
 ```
 
@@ -150,26 +168,22 @@ For `docs/src/ai/video/plan-and-execute.md`:
 
 - Topic: Agent 面试题 Plan-and-Execute
 - Main title: `Agent 为什么需要 Plan & Execute？`
-- Secondary hook: `先规划再执行`
 - Icon: glowing Agent flow icon with Planner / Executor / Replanner nodes
 
 For a script about ReAct death loops:
 
 - Topic: Agent 为什么会死循环
 - Main title: `ReAct Agent 为什么会陷入死循环？`
-- Secondary hook: `打断循环`
 - Icon: glowing loop arrow plus stuck task card or STOP hand symbol
 
 For a script about Skill hit rate:
 
 - Topic: Skills 太多如何保证命中率
 - Main title: `Skills 太多，Agent 如何精准命中？`
-- Secondary hook: `语义匹配`
 - Icon: search radar selecting one highlighted skill card
 
 For `docs/src/ai/video/claude-code-short-term-memory.md`:
 
 - Topic: Claude Code 的短期记忆机制
 - Main title: `Claude Code 的短期记忆是如何实现的？`
-- Secondary hook: `摘要压缩`
-- Icon: many message cards being compressed into one summary card, with file and recent-dialog icons retained visually but without extra text labels
+- Icon: compact Claude Code brand/app icon; keep it small and do not add a mechanism label

@@ -12,6 +12,18 @@ WHITE = (253, 253, 249, 255)
 YELLOW = (255, 238, 48, 255)
 DARK = (22, 26, 26, 255)
 SHADOW = (0, 0, 0, 155)
+PROTECTED_TERMS = (
+    "Claude Code",
+    "短期记忆",
+    "长期记忆",
+    "上下文窗口",
+    "死循环",
+    "命中率",
+    "工具调用",
+    "自动压缩",
+    "摘要压缩",
+    "加密压缩",
+)
 
 
 def resolve_font():
@@ -57,6 +69,80 @@ def fit_font(text, max_width, start_size, min_size):
         if box[2] - box[0] <= max_width:
             return font
     return make_font(min_size)
+
+
+def wrap_text(text, font, max_width):
+    lines = []
+    current = ""
+    for char in text:
+        candidate = current + char
+        box = text_bbox(candidate, font)
+        if current and box[2] - box[0] > max_width:
+            lines.append(current.strip())
+            current = char.lstrip()
+        else:
+            current = candidate
+    if current:
+        lines.append(current.strip())
+    return [line for line in lines if line]
+
+
+def balance_lines(text, font, max_width, line_count):
+    target_width = (text_bbox(text, font)[2] - text_bbox(text, font)[0]) / line_count
+    states = {(0, 0): (0, [])}
+    text_length = len(text)
+
+    for used_lines in range(line_count):
+        for start in range(text_length):
+            state = states.get((used_lines, start))
+            if state is None:
+                continue
+            previous_cost, previous_lines = state
+            remaining_lines = line_count - used_lines - 1
+            for end in range(start + 1, text_length + 1):
+                if text_length - end < remaining_lines:
+                    break
+                line = text[start:end].strip()
+                if not line:
+                    continue
+                box = text_bbox(line, font)
+                width = box[2] - box[0]
+                if width > max_width:
+                    break
+                cost = previous_cost + (width - target_width) ** 2
+                if len(line) <= 2:
+                    cost += target_width**2
+                if (
+                    end < text_length
+                    and text[end - 1].isascii()
+                    and text[end - 1].isalnum()
+                    and text[end].isascii()
+                    and text[end].isalnum()
+                ):
+                    cost += target_width**2
+                for term in PROTECTED_TERMS:
+                    term_start = text.find(term)
+                    while term_start != -1:
+                        if term_start < end < term_start + len(term):
+                            cost += target_width**2 * 100
+                        term_start = text.find(term, term_start + 1)
+                key = (used_lines + 1, end)
+                if key not in states or cost < states[key][0]:
+                    states[key] = (cost, previous_lines + [line])
+
+    result = states.get((line_count, text_length))
+    return result[1] if result else wrap_text(text, font, max_width)
+
+
+def fit_multiline_font(text, max_width, start_size, min_size, max_lines):
+    for size in range(start_size, min_size - 1, -2):
+        font = make_font(size)
+        lines = wrap_text(text, font, max_width)
+        if len(lines) <= max_lines:
+            return font, balance_lines(text, font, max_width, len(lines))
+    font = make_font(min_size)
+    lines = wrap_text(text, font, max_width)
+    return font, balance_lines(text, font, max_width, len(lines))
 
 
 def charcoal_background(width, height, seed):
@@ -113,16 +199,23 @@ def draw_centered(image, y, text, font, color, shadow_dx=5, shadow_dy=6):
     draw.text((x, y), text, font=font, fill=color, anchor="mt")
 
 
+def draw_multiline_centered(image, y, lines, font, color):
+    line_height = int(font.size * 1.16)
+    for index, line in enumerate(lines):
+        draw_centered(image, y + index * line_height, line, font, color)
+
+
 def render(width, height, title, lines, vertical):
     image = charcoal_background(width, height, 202 if vertical else 101)
-    title_font = fit_font(
+    title_font, title_lines = fit_multiline_font(
         title,
         int(width * (0.88 if vertical else 0.86)),
         int(height * (0.094 if vertical else 0.137)),
         int(height * (0.067 if vertical else 0.100)),
+        4 if vertical else 3,
     )
-    title_y = int(height * (0.339 if vertical else 0.292))
-    draw_centered(image, title_y, title, title_font, WHITE)
+    title_y = int(height * (0.27 if vertical else 0.24))
+    draw_multiline_centered(image, title_y, title_lines, title_font, WHITE)
 
     if not lines:
         return image.convert("RGB")
@@ -155,14 +248,18 @@ def main():
 
     out_dir = Path(args.out_dir).expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
-    horizontal = render(1920, 1080, args.title, args.line, vertical=False)
+    horizontal_16x9 = render(1920, 1080, args.title, args.line, vertical=False)
+    horizontal_4x3 = render(1440, 1080, args.title, args.line, vertical=False)
     vertical = render(1080, 1440, args.title, args.line, vertical=True)
 
-    horizontal_path = out_dir / f"{args.prefix}-horizontal-16x9.png"
+    horizontal_16x9_path = out_dir / f"{args.prefix}-horizontal-16x9.png"
+    horizontal_4x3_path = out_dir / f"{args.prefix}-horizontal-4x3.png"
     vertical_path = out_dir / f"{args.prefix}-vertical-3x4.png"
-    horizontal.save(horizontal_path, quality=94)
+    horizontal_16x9.save(horizontal_16x9_path, quality=94)
+    horizontal_4x3.save(horizontal_4x3_path, quality=94)
     vertical.save(vertical_path, quality=94)
-    print(horizontal_path)
+    print(horizontal_16x9_path)
+    print(horizontal_4x3_path)
     print(vertical_path)
 
 

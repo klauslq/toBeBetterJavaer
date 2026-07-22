@@ -1,4 +1,4 @@
 interface:
   display_name: "视频封面图"
-  short_description: "从技术口播稿生成横竖版封面，支持黑灰底纯文本参考图样式"
-  default_prompt: "Use $video-cover-image to generate vertical and horizontal cover images from this video script."
+  short_description: "从口播稿生成3:4、16:9和4:3三种比例的视频封面"
+  default_prompt: "Use $video-cover-image to generate matched 3:4, 16:9, and 4:3 cover images from this video script."

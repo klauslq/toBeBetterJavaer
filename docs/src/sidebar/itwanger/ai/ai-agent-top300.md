@@ -198,6 +198,13 @@ ReAct 和 Plan-and-Execute 是两种任务推进范式：ReAct 走 Thought→Act
 
 ## 20. Codex 的短期记忆是怎么实现的？
 
+题目答案：codex-short-term-memory.md
+
+技术派：https://paicoding.com/codex-short-term-memory
+
+
+### 21. 为什么聊着聊着 Agent 就变傻了？
+
 ## 18. 怎么让 LLM 返回结构化内容？比如说和Java对象的字段一一对应？
 
 关键信息：SpringAI 的 .entity()
